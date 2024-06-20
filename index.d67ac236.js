@@ -624,23 +624,11 @@ var deckrules = [
         building2: ""
     },
     {
-        building: "Core",
-        building2: ""
-    },
-    {
         building: "Foundry",
         building2: ""
     },
     {
-        building: "Starforge",
-        building2: ""
-    },
-    {
         building: "Advanced Foundry",
-        building2: ""
-    },
-    {
-        building: "Advanced Starforge",
         building2: ""
     },
     {
@@ -648,9 +636,31 @@ var deckrules = [
         building2: "Foundry"
     },
     {
+        building: "Core",
+        building2: ""
+    },
+    {
+        building: "Starforge",
+        building2: ""
+    },
+    {
+        building: "Advanced Starforge",
+        building2: ""
+    },
+    {
         building: "Advanced Starforge",
         building2: "Starforge"
     }
+];
+var deckPlaceholders = [
+    "core.svg",
+    "foundry.svg",
+    "advancedfoundry.svg",
+    "bothFoundry.png",
+    "core.svg",
+    "starforge.svg",
+    "advancedstarforge.svg",
+    "bothStarforge.png"
 ];
 //for each entry in the json file, create a new unit object and add it to the array
 unitJson.forEach(function(entry) {
@@ -666,12 +676,50 @@ document.body.appendChild(unitContainer);
 //create a div for the card remaining counter
 var cardRemainingContainer = document.createElement("div");
 cardRemainingContainer.id = "cardRemainingContainer";
+var unitStats = document.createElement("div");
+unitStats.id = "unitStats";
+cardRemainingContainer.appendChild(unitStats);
 document.body.appendChild(cardRemainingContainer);
+var deckSlots = [];
+var deckDisplay = document.createElement("div");
+deckDisplay.innerHTML = "Deck:";
+document.body.appendChild(deckDisplay);
+//make a 2x4 table for the deck grid
+var deckGrid = document.createElement("table");
+deckGrid.id = "deckGrid";
+//make 2 rows and for columns
+for(var i = 0; i < 2; i++){
+    var row = document.createElement("tr");
+    for(var j = 0; j < 4; j++){
+        var cell = document.createElement("td");
+        cell.className = "deckSlotCell";
+        deckSlots.push(cell);
+        //add the cell to the row
+        row.appendChild(cell);
+        //add the row to the table
+        deckGrid.appendChild(row);
+    }
+}
+//iterate through the deck slots
+for(var i = 0; i < deckSlots.length; i++){
+    //add an image to the cell
+    var cell = deckSlots[i];
+    //add an image to the cell
+    var img = document.createElement("img");
+    img.className = "deckSlotImage";
+    //set image source to 'foundry.svg'
+    img.src = "./images/" + deckPlaceholders[i];
+    cell.appendChild(img);
+}
+//add the deck grid to the deck display
+deckDisplay.appendChild(deckGrid);
+//create a div for the deck description
+deckDisplay.id = "deckDisplay";
 //create a deck description container div
 var deckDescriptionContainer = document.createElement("div");
 deckDescriptionContainer.id = "deckDescriptionContainer";
 //add the deck description container to the body
-document.body.appendChild(deckDescriptionContainer);
+deckDisplay.appendChild(deckDescriptionContainer);
 var unitCardElements = [];
 var remainingPicks = {
     Core: 2,
@@ -744,6 +792,36 @@ function drawUnitCard(unit) {
         }
         updateUnitCards();
     });
+    unitDiv.addEventListener("mouseover", function() {
+        console.log(unit.name + " was mouseOver");
+        //for each unit stat add a line to unitStats
+        var unitStats = document.getElementById("unitStats");
+        unitStats.innerHTML = "";
+        //for each unit stat add a line as follows
+        /*
+		this.name = jsonEntry.Name;
+		this.imagename = jsonEntry.Image;
+		this.health = jsonEntry.Health;
+		this.damage = jsonEntry.Damage;
+		this.speed = jsonEntry.Speed;
+		this.range = jsonEntry.Range;
+		this.matter = jsonEntry.Matter;
+		this.energy = jsonEntry.Energy;
+		this.bandwidth = jsonEntry.Bandwidth;
+		this.building = jsonEntry.Building;
+		this.ability = jsonEntry.Ability;
+		this.attackType = jsonEntry['Attack Type'];
+		this.attackType2 = jsonEntry['Attack Type 2'];
+		this.unitType = jsonEntry['Unit Type'];
+		this.strongAgainst = jsonEntry['Strong Against'];
+		this.strongAgainst2 = jsonEntry['StrongAgainst 2'];
+		this.weakAgainst = jsonEntry['Weak Against'];
+		this.weakAgainst2 = jsonEntry['Weak Against 2'];
+		this.other = jsonEntry.Other;
+		 */ Object.keys(unit).forEach((key)=>{
+            unitStats.innerHTML += key + ": " + unit[key] + "<br>";
+        });
+    });
 }
 //this is called whenever a unit is clicked
 function updateUnitCards() {
@@ -806,13 +884,167 @@ function updateUnitCards() {
     cardRemainingContainer.appendChild(starforgePicks);
     cardRemainingContainer.appendChild(advFoundryPicks);
     cardRemainingContainer.appendChild(advStarforgePicks);
-    //cardRemainingContainer.innerHTML += '<p class="core"> Core Remaining: ' + remainingPicks['Core'] + '<br>';
-    //cardRemainingContainer.innerHTML += '<p class="foundry">Foundry Remaining: ' + remainingPicks['Foundry'] + '<br>';
-    //cardRemainingContainer.innerHTML += '<p class="starforge">Starforge Remaining: ' + remainingPicks['Starforge'] + '<br>';
-    //cardRemainingContainer.innerHTML += '<p class="advancedfoundry">Advanced Foundry Remaining: ' + remainingPicks['Advanced Foundry'] + '<br>';
-    //cardRemainingContainer.innerHTML += '<p class="advancedstarforge">Advanced Starforge Remaining: ' + remainingPicks['Advanced Starforge'] + '<br>';
+    cardRemainingContainer.appendChild(unitStats);
     deckDescriptionContainer.innerHTML = "";
-    for(var i = 0; i < selectedUnits.length; i++)if (selectedUnits[i] != null) deckDescriptionContainer.innerHTML += selectedUnits[i].name + "<br>";
+    //for each unit store their selected strengths
+    var unitAttackTypes = [];
+    var unitTypes = [];
+    var unitStrengths = [];
+    var unitWeaknesses = [];
+    var unitAbilities = [];
+    var unitOthers = [];
+    /*
+		this.health = jsonEntry.Health;
+		this.damage = jsonEntry.Damage;
+		this.speed = jsonEntry.Speed;
+		this.range = jsonEntry.Range;
+		this.matter = jsonEntry.Matter;
+		this.energy = jsonEntry.Energy;
+		this.bandwidth = jsonEntry.Bandwidth;
+		this.building = jsonEntry.Building;
+		this.ability = jsonEntry.Ability;
+	*/ //make an array for each unit parameter above
+    var deckHealth = 0;
+    var deckDamage = 0;
+    var deckSpeed = 0;
+    var deckRange = 0;
+    var deckMatter = 0;
+    var deckEnergy = 0;
+    var deckBandwidth = 0;
+    for(var i = 0; i < selectedUnits.length; i++)if (selectedUnits[i]) {
+        //add the name of the unit to the deck description
+        deckDescriptionContainer.innerHTML += selectedUnits[i].name + ",";
+        //construct the arrays of the deck stats
+        if (selectedUnits[i].strongAgainst) unitStrengths.push(selectedUnits[i].strongAgainst);
+        if (selectedUnits[i].strongAgainst2) unitStrengths.push(selectedUnits[i].strongAgainst2);
+        if (selectedUnits[i].weakAgainst) unitWeaknesses.push(selectedUnits[i].weakAgainst);
+        if (selectedUnits[i].weakAgainst2) unitWeaknesses.push(selectedUnits[i].weakAgainst2);
+        if (selectedUnits[i].unitType) unitTypes.push(selectedUnits[i].unitType);
+        if (selectedUnits[i].attackType) unitAttackTypes.push(selectedUnits[i].attackType);
+        if (selectedUnits[i].attackType2) unitAttackTypes.push(selectedUnits[i].attackType2);
+        if (selectedUnits[i].ability) unitAbilities.push(selectedUnits[i].ability);
+        if (selectedUnits[i].ability2) unitAbilities.push(selectedUnits[i].ability2);
+        if (selectedUnits[i].other) unitOthers.push(selectedUnits[i].other);
+        deckHealth += selectedUnits[i].health;
+        deckDamage += selectedUnits[i].damage;
+        deckSpeed += selectedUnits[i].speed;
+        deckRange += selectedUnits[i].range;
+        deckMatter += selectedUnits[i].matter;
+        deckEnergy += selectedUnits[i].energy;
+        deckBandwidth += selectedUnits[i].bandwidth;
+    }
+    deckDescriptionContainer.innerHTML += "<br>Deck Stats: <br>";
+    var statsString = "==========<br>";
+    statsString += "Health: " + deckHealth + "<br>";
+    statsString += "Damage: " + deckDamage + "<br>";
+    statsString += "Speed: " + deckSpeed + "<br>";
+    statsString += "Range: " + deckRange + "<br>";
+    statsString += "Matter: " + deckMatter + "<br>";
+    statsString += "Energy: " + deckEnergy + "<br>";
+    statsString += "Bandwidth: " + deckBandwidth + "<br>";
+    statsString += "==========<br>";
+    deckDescriptionContainer.innerHTML += statsString;
+    //for each unit strength in unitstrengths
+    var strengthsString = "Strong Against:";
+    for(var i = 0; i < unitStrengths.length; i++)//if the unit strength is not null
+    if (unitStrengths[i] != null || unitStrengths[i] != "") {
+        //add the unit strength to the deck description container
+        if (!strengthsString.includes(unitStrengths[i])) strengthsString += unitStrengths[i] + ",";
+        else {
+            var index = strengthsString.search(unitStrengths[i] + unitStrengths[i].length);
+            strengthsString = strengthsString.slice(0, index) + "+" + strengthsString.slice(index);
+        }
+    }
+    deckDescriptionContainer.innerHTML += strengthsString;
+    //for each unit strength in unitweaknesses
+    var weaknessString = "<br>Weak Against:";
+    for(var i = 0; i < unitWeaknesses.length; i++)//if the unit strength is not null
+    if (unitWeaknesses[i] != null || unitWeaknesses[i] != "") {
+        //add the unit weaknesses to the deck description container only if it's not repeated
+        // if deckDescriptionContainer.innerHTML contains the text of the weaknesses, then do not add it, otherwise add it
+        if (!weaknessString.includes(unitWeaknesses[i])) weaknessString += unitWeaknesses[i] + ",";
+        else {
+            var index = weaknessString.search(unitWeaknesses[i] + unitWeaknesses[i].length);
+            weaknessString = weaknessString.slice(0, index) + "+" + weaknessString.slice(index);
+        }
+    }
+    deckDescriptionContainer.innerHTML += weaknessString;
+    //for each unit strength in
+    //unitAttackTypes;
+    //unitTypes;
+    //unitAbilities;
+    var unitAttackTypesString = "<br>Attack Types:";
+    for(var i = 0; i < unitAttackTypes.length; i++)//if the unit strength is not null
+    if (unitAttackTypes[i] != null || unitAttackTypes[i] != "") {
+        //add the unit weaknesses to the deck description container only if it's not repeated
+        // if deckDescriptionContainer.innerHTML contains the text of the weaknesses, then do not add it, otherwise add it
+        if (!unitAttackTypesString.includes(unitAttackTypes[i])) unitAttackTypesString += unitAttackTypes[i] + ",";
+        else {
+            //find the index where unitAbilities is in unitAbilitiesString
+            var index = unitAttackTypesString.search(unitAttackTypes[i] + unitAttackTypes[i].length);
+            unitAttackTypesString = unitAttackTypesString.slice(0, index) + "+" + unitAttackTypesString.slice(index);
+        //at the index insert the '+' character into the string
+        }
+    }
+    deckDescriptionContainer.innerHTML += unitAttackTypesString;
+    //unitTypes;
+    var unitTypesString = "<br>Unit Types:";
+    for(var i = 0; i < unitTypes.length; i++)//if the unit strength is not null
+    if (unitTypes[i] != null || unitTypes[i] != "") {
+        //add the unit weaknesses to the deck description container only if it's not repeated
+        // if deckDescriptionContainer.innerHTML contains the text of the weaknesses, then do not add it, otherwise add it
+        if (!unitTypesString.includes(unitTypes[i])) unitTypesString += unitTypes[i] + ",";
+        else {
+            //find the index where unitAbilities is in unitAbilitiesString
+            var index = unitTypesString.search(unitTypes[i] + unitTypes[i].length);
+            unitTypesString = unitTypesString.slice(0, index) + "+" + unitTypesString.slice(index);
+        //at the index insert the '+' character into the string
+        }
+    }
+    deckDescriptionContainer.innerHTML += unitTypesString;
+    //unitAbilities;
+    var unitAbilitiesString = "<br>Abilities:";
+    for(var i = 0; i < unitAbilities.length; i++)//if the unit strength is not null
+    if (unitAbilities[i] != null || unitAbilities[i] != "") {
+        //add the unit weaknesses to the deck description container only if it's not repeated
+        // if deckDescriptionContainer.innerHTML contains the text of the weaknesses, then do not add it, otherwise add it
+        if (!unitAbilitiesString.includes(unitAbilities[i])) unitAbilitiesString += unitAbilities[i] + ",";
+        else {
+            //find the index where unitAbilities is in unitAbilitiesString
+            var index = unitAbilitiesString.search(unitAbilities[i] + unitAbilities[i].length);
+            unitAbilitiesString = unitAbilitiesString.slice(0, index) + "+" + unitAbilitiesString.slice(index);
+        //at the index insert the '+' character into the string
+        }
+    }
+    deckDescriptionContainer.innerHTML += unitAbilitiesString;
+    //unitAbilities;
+    var unitOthersString = "<br>Other:";
+    for(var i = 0; i < unitOthers.length; i++)//if the unit strength is not null
+    if (unitOthers[i] != null || unitOthers[i] != "") {
+        //add the unit weaknesses to the deck description container only if it's not repeated
+        // if deckDescriptionContainer.innerHTML contains the text of the weaknesses, then do not add it, otherwise add it
+        if (!unitOthersString.includes(unitOthers[i])) unitOthersString += unitOthers[i] + ",";
+        else {
+            //find the index where unitAbilities is in unitAbilitiesString
+            var index = unitOthersString.search(unitOthers[i] + unitOthers[i].length);
+            unitOthersString = unitOthersString.slice(0, index) + "+" + unitOthersString.slice(index);
+        //at the index insert the '+' character into the string
+        }
+    }
+    deckDescriptionContainer.innerHTML += unitOthersString;
+    //search through deckDescriptionContainer for any commas preceding a new line and remove the commas
+    console.log(deckDescriptionContainer.innerHTML);
+    deckDescriptionContainer.innerHTML = deckDescriptionContainer.innerHTML.replace(",<br>", "<br>");
+    //loop through the selected units and add their details to the deck display
+    //for each selected unit add its name fo the deckdescriptioncontainer innerhtml
+    for(var i = 0; i < selectedUnits.length; i++)if (selectedUnits[i]) {
+        //add the name of the unit to the deck slots
+        var imagename = selectedUnits[i].name.replace(/\s/g, "").toLowerCase();
+        deckSlots[i].innerHTML = '<img class="deckSlotImage" src="images/' + imagename + '.png">';
+        deckSlots[i].innerHTML += '<div class="unit-card">' + selectedUnits[i].name + "</div>";
+    //add the image of the unit to the deck slots
+    //low case and remove the space from the name ot get the image
+    }
 }
 updateUnitCards();
 //for each unit in the array, call the drawUnit function
@@ -821,7 +1053,7 @@ units.forEach(function(unit) {
 });
 
 },{"8f00d5bd190beb80":"kJ7AW"}],"kJ7AW":[function(require,module,exports) {
-module.exports = JSON.parse('[{"Confirmed":"y","Name":"Blink","Image":"blink","Health":2,"Damage":1,"Speed":3,"Range":2,"Matter":100,"Energy":0,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"Blink","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"Air","Other":"","Manufacturer":"FAR HORIZON COLLECTIVE","Link":"https://www.playbattleaces.com/units/blink","":"","__1":"","z":""},{"Confirmed":"y","Name":"Blink Hunter","Image":"blinkhunter","Health":2,"Damage":1,"Speed":2,"Range":2,"Matter":75,"Energy":25,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Ground","Ability":"Blink","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground","Weak Against 2":"","Other":"","Manufacturer":"FAR HORIZON COLLECTIVE","Link":"https://www.playbattleaces.com/units/blinkhunter","":"","__1":"","z":""},{"Confirmed":"y","Name":"Crab","Image":"crab","Health":4,"Damage":2,"Speed":3,"Range":1,"Matter":100,"Energy":0,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"Air","Other":"","Manufacturer":"NORTH PERFORMANCE","Link":"https://www.playbattleaces.com/units/crab","":"","__1":"","z":""},{"Confirmed":"y","Name":"Gunbot","Image":"gunbot","Health":1,"Damage":1,"Speed":2,"Range":2,"Matter":50,"Energy":0,"Bandwidth":1,"Building":"Core","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"Overclock","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"Air","Other":"","Manufacturer":"SENKAISHU LIMITED","Link":"https://www.playbattleaces.com/units/gunbot","":"","__1":"","z":""},{"Confirmed":"y","Name":"Hornet","Image":"hornet","Health":1,"Damage":2,"Speed":5,"Range":2,"Matter":75,"Energy":25,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground","Weak Against 2":"","Other":"","Manufacturer":"CORONA CENTRAL SYSTEMS","Link":"https://www.playbattleaces.com/units/hornet","":"","__1":"","z":""},{"Confirmed":"y","Name":"Hunter","Image":"hunter","Health":2,"Damage":1,"Speed":2,"Range":2,"Matter":75,"Energy":25,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"NORTH PERFORMANCE","Link":"https://www.playbattleaces.com/units/hunter","":"","__1":"","z":""},{"Confirmed":"y","Name":"Missilebot","Image":"missilebot","Health":2,"Damage":2,"Speed":2,"Range":2,"Matter":75,"Energy":25,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Ground","Ability":"Overclock","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"SENKAISHU LIMITED","Link":"https://www.playbattleaces.com/units/missilebot","":"","__1":"","z":""},{"Confirmed":"y","Name":"Recall","Image":"recall","Health":2,"Damage":1,"Speed":2,"Range":2,"Matter":100,"Energy":0,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"Recall","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"Air","Other":"","Manufacturer":"GHOSTS OF VENUS","Link":"https://www.playbattleaces.com/units/recall","":"","__1":"","z":""},{"Confirmed":"y","Name":"Recall Hunter","Image":"recallhunter","Health":2,"Damage":2,"Speed":1,"Range":2,"Matter":75,"Energy":25,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Ground","Ability":"Recall","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground","Weak Against 2":"","Other":"","Manufacturer":"GHOSTS OF VENUS","Link":"https://www.playbattleaces.com/units/recallhunter","":"","__1":"","z":""},{"Confirmed":"y","Name":"Wasp","Image":"wasp","Health":1,"Damage":1,"Speed":5,"Range":1,"Matter":25,"Energy":0,"Bandwidth":1,"Building":"Core","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"Air","Other":"","Manufacturer":"GHOSTS OF VENUS","Link":"https://www.playbattleaces.com/units/wasp","":"","__1":"","z":""},{"Confirmed":"y","Name":"Beetle","Image":"beetle","Health":2,"Damage":1,"Speed":2,"Range":2,"Matter":75,"Energy":25,"Bandwidth":2,"Building":"Core","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground","Weak Against 2":"","Other":"","Manufacturer":"IRON AND SONS","Link":"https://www.playbattleaces.com/units/beetle","":"","__1":"","z":""},{"Confirmed":"y","Name":"Scorpion","Image":"scorpion","Health":3,"Damage":1,"Speed":3,"Range":1,"Matter":50,"Energy":0,"Bandwidth":1,"Building":"Core","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"Air","Other":"","Manufacturer":"IRON AND SONS","Link":"https://www.playbattleaces.com/units/scorpion","":"","__1":"","z":""},{"Confirmed":"","Name":"Ballista","Image":"ballista","Health":2,"Damage":5,"Speed":2,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"High Health","Weak Against 2":"","Other":"","Manufacturer":"NORTH PERFORMANCE","Link":"https://www.playbattleaces.com/units/ballista","":"","__1":"","z":""},{"Confirmed":"y","Name":"Bomber","Image":"bomber","Health":1,"Damage":5,"Speed":5,"Range":1,"Matter":50,"Energy":50,"Bandwidth":2,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"Self Destructs","Strong Against":"Core Units","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"High Health","Other":"","Manufacturer":"IRON AND SONS","Link":"https://www.playbattleaces.com/units/bomber","":"","__1":"","z":""},{"Confirmed":"y","Name":"Crusader","Image":"crusader","Health":5,"Damage":4,"Speed":3,"Range":1,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"Splash","StrongAgainst 2":"","Weak Against":"Burst","Weak Against 2":"","Other":"","Manufacturer":"IRON AND SONS","Link":"https://www.playbattleaces.com/units/crusader","":"","__1":"","z":""},{"Confirmed":"y","Name":"Destroyer","Image":"destroyer","Health":3,"Damage":5,"Speed":2,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Burst","Unit Type":"Ground","Ability":"","Strong Against":"High Health","StrongAgainst 2":"","Weak Against":"Core Units","Weak Against 2":"","Other":"","Manufacturer":"HEAVY UNION ALLIANCE","Link":"https://www.playbattleaces.com/units/destroyer","":"","__1":"","z":""},{"Confirmed":"y","Name":"King Crab","Image":"kingcrab","Health":4,"Damage":5,"Speed":3,"Range":1,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"","Strong Against":"Splash","StrongAgainst 2":"","Weak Against":"Burst","Weak Against 2":"","Other":"","Manufacturer":"NORTH PERFORMANCE","Link":"https://www.playbattleaces.com/units/kingcrab","":"","__1":"","z":""},{"Confirmed":"y","Name":"Mortar","Image":"mortar","Health":4,"Damage":5,"Speed":2,"Range":5,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"Setup","Strong Against":"","StrongAgainst 2":"","Weak Against":"Long Range","Weak Against 2":"","Other":"","Manufacturer":"HEAVY UNION ALLIANCE","Link":"https://www.playbattleaces.com/units/mortar","":"","__1":"","z":""},{"Confirmed":"y","Name":"Recall Shocker","Image":"recallshocker","Health":3,"Damage":5,"Speed":1,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"Recall","Strong Against":"","StrongAgainst 2":"","Weak Against":"High Health","Weak Against 2":"","Other":"","Manufacturer":"GHOSTS OF VENUS","Link":"https://www.playbattleaces.com/units/recallshocker","":"","__1":"","z":""},{"Confirmed":"y","Name":"Shocker","Image":"shocker","Health":3,"Damage":5,"Speed":2,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"","Strong Against":"Core Units","StrongAgainst 2":"","Weak Against":"High Health","Weak Against 2":"","Other":"Shock Splash","Manufacturer":"CORONA CENTRAL SYSTEMS","Link":"https://www.playbattleaces.com/units/shocker","":"","__1":"","z":""},{"Confirmed":"y","Name":"Swift Shocker","Image":"swiftshocker","Health":2,"Damage":5,"Speed":4,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"","Strong Against":"Core Units","StrongAgainst 2":"","Weak Against":"High Health","Weak Against 2":"","Other":"Shock Splash","Manufacturer":"","Link":"https://www.playbattleaces.com/units/swiftshocker","":"","__1":"","z":""},{"Confirmed":"y?","Name":"Heavy Hunter","Image":"heavyhunter","Health":"Unknown","Damage":"","Speed":"","Range":"","Matter":"","Energy":"","Bandwidth":"","Building":"Foundry","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"","Link":"https://www.playbattleaces.com/units/heavyhunter","":"","__1":"","z":""},{"Confirmed":"y?","Name":"Raider","Image":"raider","Health":"Unknown","Damage":"","Speed":"","Range":"","Matter":"","Energy":"","Bandwidth":"","Building":"Foundry","Attack Type":"Anti-Worker","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"","Link":"https://www.playbattleaces.com/units/raider","":"","__1":"","z":""},{"Confirmed":"y","Name":"Heavy Turret","Image":"heavyturret","Health":5,"Damage":4,"Speed":1,"Range":4,"Matter":200,"Energy":100,"Bandwidth":0,"Building":"Starforge","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Base defense","Ability":"","Strong Against":"Harassment","StrongAgainst 2":"","Weak Against":"Long Range","Weak Against 2":"","Other":"Placed","Manufacturer":"IRON AND SONS","Link":"https://www.playbattleaces.com/units/heavyturret","":"","__1":"","z":""},{"Confirmed":"y","Name":"Stinger","Image":"stinger","Health":3,"Damage":5,"Speed":5,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Starforge","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"","Other":"Strong With Melee","Manufacturer":"IRON AND SONS","Link":"https://www.playbattleaces.com/units/stinger","":"","__1":"","z":""},{"Confirmed":"y","Name":"Advanced Recall","Image":"advancedrecall","Health":1,"Damage":3,"Speed":2,"Range":2,"Matter":50,"Energy":50,"Bandwidth":2,"Building":"Starforge","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"Recall","Strong Against":"Ground","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"","Other":"","Manufacturer":"GHOSTS OF VENUS","Link":"https://www.playbattleaces.com/units/advancedrecall","":"","__1":"","z":""},{"Confirmed":"y","Name":"Airship","Image":"airship","Health":4,"Damage":4,"Speed":3,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Starforge","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground Anti-Air","Weak Against 2":"","Other":"Air2Air Specialist","Manufacturer":"NORTH PERFORMANCE","Link":"https://www.playbattleaces.com/units/ariship","":"","__1":"","z":""},{"Confirmed":"y","Name":"Falcon","Image":"falcon","Health":4,"Damage":3,"Speed":1,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Starforge","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"Ground","StrongAgainst 2":"","Weak Against":"Anti-Air","Weak Against 2":"","Other":"","Manufacturer":"GHOSTS OF VENUS","Link":"https://www.playbattleaces.com/units/falcon","":"","__1":"","z":""},{"Confirmed":"y","Name":"Dragonfly","Image":"dragonfly","Health":4,"Damage":3,"Speed":4,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Starforge","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"Anti-Air","Weak Against 2":"","Other":"Mobile Harassment","Manufacturer":"CORONA CENTRAL SYSTEMS","Link":"https://www.playbattleaces.com/units/dragonfly","":"","__1":"","z":""},{"Confirmed":"y","Name":"Butterfly","Image":"butterfly","Health":1,"Damage":5,"Speed":3,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Starforge","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"Ground","StrongAgainst 2":"","Weak Against":"Anti-Air","Weak Against 2":"","Other":"","Manufacturer":"NORTH PERFORMANCE","Link":"https://www.playbattleaces.com/units/butterfly","":"","__1":"","z":""},{"Confirmed":"y?","Name":"Mammoth","Image":"mammoth","Health":5,"Damage":3,"Speed":3,"Range":1,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Starforge","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"","Link":"https://www.playbattleaces.com/units/mammoth","":"","__1":"","z":"z"},{"Confirmed":"y","Name":"Predator","Image":"predator","Health":2,"Damage":5,"Speed":2,"Range":5,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Advanced Foundry","Attack Type":"Anti-Air","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground","Weak Against 2":"","Other":"","Manufacturer":"HEAVY UNION ALLIANCE","Link":"https://www.playbattleaces.com/units/predator","":"","__1":"","z":""},{"Confirmed":"y","Name":"Heavy Ballista","Image":"heavyballista","Health":4,"Damage":5,"Speed":2,"Range":2,"Matter":250,"Energy":250,"Bandwidth":10,"Building":"Advanced Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"","Strong Against":"Core Units","StrongAgainst 2":"","Weak Against":"High Health","Weak Against 2":"","Other":"","Manufacturer":"NORTH PERFORMANCE","Link":"https://www.playbattleaces.com/units/heavyballista","":"","__1":"","z":""},{"Confirmed":"z","Name":"Sniper","Image":"sniper","Health":2,"Damage":5,"Speed":1,"Range":5,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Advanced Foundry","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"","Link":"https://www.playbattleaces.com/units/sniper","":"","__1":"","z":"z"},{"Confirmed":"z","Name":"Behemoth","Image":"behemoth","Health":5,"Damage":"?","Speed":2,"Range":2,"Matter":250,"Energy":0,"Bandwidth":5,"Building":"Advanced Foundry","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"Blink","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"","Link":"https://www.playbattleaces.com/units/behemoth","":"","__1":"","z":"z"},{"Confirmed":"y?","Name":"Advanced Blink","Image":"advancedblink","Health":4,"Damage":2,"Speed":3,"Range":2,"Matter":50,"Energy":50,"Bandwidth":5,"Building":"Advanced Foundry","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"","Link":"https://www.playbattleaces.com/units/advancedblink","":"","__1":"","z":""},{"Confirmed":"y?","Name":"Double Machine Gun","Image":"doublemachinegun","Health":"Unknown","Damage":"","Speed":"","Range":"","Matter":"","Energy":"","Bandwidth":"","Building":"Advanced Foundry","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"","Link":"https://www.playbattleaces.com/units/doublemachinegun","":"","__1":"","z":""},{"Confirmed":"y","Name":"Valkyrie","Image":"valkyrie","Health":4,"Damage":5,"Speed":3,"Range":3,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Advanced Starforge","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground Anti-Air","Weak Against 2":"","Other":"Air2Air Specialist","Manufacturer":"CORONA CENTRAL SYSTEMS","Link":"https://www.playbattleaces.com/units/valkyrie","":"","__1":"","z":""},{"Confirmed":"y","Name":"Locust","Image":"locust","Health":1,"Damage":2,"Speed":4,"Range":2,"Matter":50,"Energy":50,"Bandwidth":2,"Building":"Advanced Starforge","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"Anti-Air","Weak Against 2":"","Other":"Mobile Harassment","Manufacturer":"","Link":"https://www.playbattleaces.com/units/locust","":"","__1":"","z":""},{"Confirmed":"y","Name":"Katbus","Image":"katbus","Health":5,"Damage":5,"Speed":2,"Range":2,"Matter":250,"Energy":250,"Bandwidth":10,"Building":"Advanced Starforge","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"Ground","StrongAgainst 2":"Splash","Weak Against":"Anti-Air","Weak Against 2":"","Other":"","Manufacturer":"CORONA CENTRAL SYSTEMS","Link":"https://www.playbattleaces.com/units/katbus","":"","__1":"","z":""},{"Confirmed":"y","Name":"Bulwark","Image":"bulwark","Health":5,"Damage":5,"Speed":1,"Range":2,"Matter":250,"Energy":250,"Bandwidth":10,"Building":"Advanced Starforge","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"Ground","StrongAgainst 2":"","Weak Against":"Anti-Air","Weak Against 2":"","Other":"","Manufacturer":"NORTH PERFORMANCE","Link":"https://www.playbattleaces.com/units/bulwark","":"","__1":"","z":""},{"Confirmed":"z","Name":"Kraken","Image":"kraken","Health":5,"Damage":5,"Speed":1,"Range":"","Matter":3000,"Energy":3000,"Bandwidth":"","Building":"?","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"","Link":"https://www.playbattleaces.com/units/kraken","":"","__1":"","z":"x"},{"Confirmed":"y?","Name":"Artillery","Image":"artillery","Health":"Unknown","Damage":"","Speed":"","Range":"","Matter":"","Energy":"","Bandwidth":"","Building":"Advanced Starforge","Attack Type":"Anti-Ground","Attack Type 2":"?","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"","Link":"https://www.playbattleaces.com/units/artillery","":"","__1":"","z":""}]');
+module.exports = JSON.parse('[{"Name":"Blink","Image":"blink","Health":2,"Damage":1,"Speed":3,"Range":2,"Matter":100,"Energy":0,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"Blink","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"Air","Other":""},{"Name":"Blink Hunter","Image":"blinkhunter","Health":2,"Damage":1,"Speed":2,"Range":2,"Matter":75,"Energy":25,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Ground","Ability":"Blink","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground","Weak Against 2":"","Other":""},{"Name":"Crab","Image":"crab","Health":4,"Damage":2,"Speed":3,"Range":1,"Matter":100,"Energy":0,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"Air","Other":""},{"Name":"Gunbot","Image":"gunbot","Health":1,"Damage":1,"Speed":2,"Range":2,"Matter":50,"Energy":0,"Bandwidth":1,"Building":"Core","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"Overclock","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"Air","Other":""},{"Name":"Hornet","Image":"hornet","Health":1,"Damage":2,"Speed":5,"Range":2,"Matter":75,"Energy":25,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground","Weak Against 2":"","Other":""},{"Name":"Hunter","Image":"hunter","Health":2,"Damage":1,"Speed":2,"Range":2,"Matter":75,"Energy":25,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground","Weak Against 2":"","Other":""},{"Name":"Missilebot","Image":"missilebot","Health":2,"Damage":2,"Speed":2,"Range":2,"Matter":75,"Energy":25,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Ground","Ability":"Overclock","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground","Weak Against 2":"","Other":""},{"Name":"Recall","Image":"recall","Health":2,"Damage":1,"Speed":2,"Range":2,"Matter":100,"Energy":0,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"Recall","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"Air","Other":""},{"Name":"Recall Hunter","Image":"recallhunter","Health":2,"Damage":2,"Speed":1,"Range":2,"Matter":75,"Energy":25,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Ground","Ability":"Recall","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground","Weak Against 2":"","Other":""},{"Name":"Wasp","Image":"wasp","Health":1,"Damage":1,"Speed":5,"Range":1,"Matter":25,"Energy":0,"Bandwidth":1,"Building":"Core","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"Air","Other":""},{"Name":"Beetle","Image":"beetle","Health":2,"Damage":1,"Speed":2,"Range":2,"Matter":75,"Energy":25,"Bandwidth":2,"Building":"Core","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground","Weak Against 2":"","Other":""},{"Name":"Scorpion","Image":"scorpion","Health":3,"Damage":1,"Speed":3,"Range":1,"Matter":50,"Energy":0,"Bandwidth":1,"Building":"Core","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"Air","Other":""},{"Name":"Ballista","Image":"ballista","Health":2,"Damage":5,"Speed":2,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"High Health","Weak Against 2":"","Other":""},{"Name":"Bomber","Image":"bomber","Health":1,"Damage":5,"Speed":5,"Range":1,"Matter":50,"Energy":50,"Bandwidth":2,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"Self Destructs","Strong Against":"Core Units","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"High Health","Other":""},{"Name":"Crusader","Image":"crusader","Health":5,"Damage":4,"Speed":3,"Range":1,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"Splash","StrongAgainst 2":"","Weak Against":"Burst","Weak Against 2":"","Other":""},{"Name":"Destroyer","Image":"destroyer","Health":3,"Damage":5,"Speed":2,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Burst","Unit Type":"Ground","Ability":"","Strong Against":"High Health","StrongAgainst 2":"","Weak Against":"Core Units","Weak Against 2":"","Other":""},{"Name":"King Crab","Image":"kingcrab","Health":4,"Damage":5,"Speed":3,"Range":1,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"","Strong Against":"Splash","StrongAgainst 2":"","Weak Against":"Burst","Weak Against 2":"","Other":""},{"Name":"Mortar","Image":"mortar","Health":4,"Damage":5,"Speed":2,"Range":5,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"Setup","Strong Against":"","StrongAgainst 2":"","Weak Against":"Long Range","Weak Against 2":"","Other":"Long Range"},{"Name":"Recall Shocker","Image":"recallshocker","Health":3,"Damage":5,"Speed":1,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"Recall","Strong Against":"","StrongAgainst 2":"","Weak Against":"High Health","Weak Against 2":"","Other":""},{"Name":"Shocker","Image":"shocker","Health":3,"Damage":5,"Speed":2,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"","Strong Against":"Core Units","StrongAgainst 2":"","Weak Against":"High Health","Weak Against 2":"","Other":"Shock Splash"},{"Name":"Turret","Image":"","Health":4,"Damage":2,"Speed":1,"Range":4,"Matter":100,"Energy":50,"Bandwidth":0,"Building":"Foundry","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Base defense","Ability":"","Strong Against":"Harassment","StrongAgainst 2":"","Weak Against":"Long Range","Weak Against 2":"","Other":"Placed"},{"Name":"Raider","Image":"","Health":3,"Damage":5,"Speed":4,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Worker","Attack Type 2":"Workers","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"Only attacks workers"},{"Name":"Heavy Hunter","Image":"","Health":4,"Damage":4,"Speed":3,"Range":3,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground","Weak Against 2":"","Other":""},{"Name":"Swift Shocker","Image":"swiftshocker","Health":2,"Damage":5,"Speed":4,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"","Strong Against":"Core Units","StrongAgainst 2":"","Weak Against":"High Health","Weak Against 2":"","Other":"Shock Splash"},{"Name":"Mammoth","Image":"","Health":5,"Damage":3,"Speed":3,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Starforge","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"Splash","StrongAgainst 2":"","Weak Against":"Burst","Weak Against 2":"","Other":"Durable"},{"Name":"Heavy Turret","Image":"heavyturret","Health":5,"Damage":4,"Speed":1,"Range":4,"Matter":200,"Energy":100,"Bandwidth":0,"Building":"Starforge","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Base defense","Ability":"","Strong Against":"Harassment","StrongAgainst 2":"","Weak Against":"Long Range","Weak Against 2":"","Other":"Placed"},{"Name":"Stinger","Image":"stinger","Health":3,"Damage":5,"Speed":5,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Starforge","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"","Other":"Strong With Melee"},{"Name":"Advanced Recall","Image":"advancedrecall","Health":1,"Damage":3,"Speed":2,"Range":2,"Matter":50,"Energy":50,"Bandwidth":2,"Building":"Starforge","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"Recall","Strong Against":"Ground","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"","Other":""},{"Name":"Airship","Image":"airship","Health":4,"Damage":4,"Speed":3,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Starforge","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"Air2Air Specialist"},{"Name":"Falcon","Image":"falcon","Health":4,"Damage":3,"Speed":1,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Starforge","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"Ground","StrongAgainst 2":"","Weak Against":"Anti-Air","Weak Against 2":"","Other":""},{"Name":"Dragonfly","Image":"dragonfly","Health":4,"Damage":3,"Speed":4,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Starforge","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"Anti-Air","Weak Against 2":"","Other":"Mobile Harassment"},{"Name":"Butterfly","Image":"butterfly","Health":1,"Damage":5,"Speed":3,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Starforge","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"Ground","StrongAgainst 2":"","Weak Against":"Anti-Air","Weak Against 2":"","Other":""},{"Name":"Predator","Image":"predator","Health":2,"Damage":5,"Speed":2,"Range":5,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Advanced Foundry","Attack Type":"Anti-Air","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground","Weak Against 2":"","Other":"Long Range"},{"Name":"Assaultbot","Image":"","Health":1,"Damage":2,"Speed":2,"Range":2,"Matter":50,"Energy":0,"Bandwidth":1,"Building":"Advanced Foundry","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"Ground","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"","Other":""},{"Name":"Behemoth","Image":"","Health":5,"Damage":4,"Speed":3,"Range":2,"Matter":250,"Energy":0,"Bandwidth":5,"Building":"Advanced Foundry","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"Splash","StrongAgainst 2":"","Weak Against":"Burst","Weak Against 2":"","Other":"Durable"},{"Name":"Sniper","Image":"sniper","Health":2,"Damage":4,"Speed":1,"Range":5,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Advanced Foundry","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"Slow Units","StrongAgainst 2":"","Weak Against":"Fast Units","Weak Against 2":"","Other":"Long Range"},{"Name":"Heavy Ballista","Image":"heavyballista","Health":4,"Damage":5,"Speed":2,"Range":2,"Matter":250,"Energy":250,"Bandwidth":10,"Building":"Advanced Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"","Strong Against":"Core Units","StrongAgainst 2":"","Weak Against":"High Health","Weak Against 2":"","Other":"High Bandwidth"},{"Name":"Valkyrie","Image":"valkyrie","Health":4,"Damage":5,"Speed":3,"Range":3,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Advanced Starforge","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground Anti-Air","Weak Against 2":"","Other":"Air2Air Specialist"},{"Name":"Locust","Image":"locust","Health":1,"Damage":2,"Speed":4,"Range":2,"Matter":50,"Energy":50,"Bandwidth":2,"Building":"Advanced Starforge","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"Anti-Air","Weak Against 2":"","Other":"Mobile Harassment"},{"Name":"Katbus","Image":"katbus","Health":5,"Damage":5,"Speed":2,"Range":2,"Matter":250,"Energy":250,"Bandwidth":10,"Building":"Advanced Starforge","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"Ground","StrongAgainst 2":"Splash","Weak Against":"Anti-Air","Weak Against 2":"","Other":"High Bandwidth"},{"Name":"Bulwark","Image":"bulwark","Health":5,"Damage":5,"Speed":1,"Range":2,"Matter":250,"Energy":250,"Bandwidth":10,"Building":"Advanced Starforge","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"Ground","StrongAgainst 2":"","Weak Against":"Anti-Air","Weak Against 2":"","Other":"High Bandwidth"}]');
 
 },{}]},["ecy6S","alK4Z"], "alK4Z", "parcelRequire716c")
 

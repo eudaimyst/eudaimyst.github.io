@@ -82,8 +82,14 @@
   padding: 0;
 }
 
-.foundry, .advancedfoundry {
+.foundry {
   color: #c56a6a;
+  margin: 0;
+  padding: 0;
+}
+
+.advancedfoundry {
+  color: #773131;
   margin: 0;
   padding: 0;
 }
@@ -101,7 +107,37 @@
 }
 
 .grey {
-  background-color: gray;
+  opacity: .3;
+  background-color: #585858;
+}
+
+.deckSlotCell {
+  display: absolute;
+  color: #fff;
+  background-color: #000;
+  border: 1px outset #3629e2;
+  width: 120px;
+  height: 120px;
+  font-weight: 100;
+  bottom: 0;
+}
+
+.deckSlotImage {
+  width: 100px;
+  height: 100px;
+}
+
+#unitStats {
+  color: #fff;
+  background-color: #000;
+  font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+  font-size: smaller;
+  font-weight: 400;
+}
+
+#deckGrid {
+  width: 480px;
+  height: 240px;
 }
 
 #unitContainer {
@@ -112,16 +148,26 @@
 }
 
 #cardRemainingContainer {
-  background-color: #333;
-  flex-direction: column;
+  background-color: #120920;
+  flex-flow: column wrap;
   width: 10%;
   display: flex;
 }
 
+#deckDisplay {
+  background-color: #090c1a;
+  flex-direction: column;
+  display: flex;
+}
+
 #deckDescriptionContainer {
-  background-color: #333;
+  color: #fff;
+  background-color: #0f0e13;
   flex-flow: wrap;
-  width: 50%;
+  width: 100%;
+  font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+  font-weight: lighter;
   display: flex;
 }
 
