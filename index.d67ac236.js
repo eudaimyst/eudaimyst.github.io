@@ -142,14 +142,14 @@
       this[globalName] = mainExports;
     }
   }
-})({"gbXMy":[function(require,module,exports) {
+})({"ecy6S":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
 var HMR_USE_SSE = false;
-module.bundle.HMR_BUNDLE_ID = "fe4256060641b553";
+module.bundle.HMR_BUNDLE_ID = "072be47ed67ac236";
 "use strict";
 /* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, HMR_USE_SSE, chrome, browser, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
@@ -583,459 +583,246 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
     });
 }
 
-},{}],"bNKaB":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-var _unitsJson = require("./units.json"); //with path
-var _unitsJsonDefault = parcelHelpers.interopDefault(_unitsJson);
-console.log("Hello world!");
-console.log((0, _unitsJsonDefault.default));
-//console.log(unitJson['length']);
-//console.log(unitJson[0]);
-console.log("--------------------------------------------------------------------------------------");
-console.log("--------------------------------------------------------------------------------------");
-console.log("--------------------------------------------------------------------------------------");
-console.log("--------------------------------------------------------------------------------------");
-console.log("--------------------------------------------------------------------------------------");
-//console.log(words);
-//document.text = 'Hello world!';
-var unitInfoText = document.getElementById("unitInfo");
-unitInfoText.innerHTML = "Hello world!";
-var deckStatsText = document.getElementById("deckStats");
-deckStatsText.innerHTML = "Deck Stats:";
-var coreP = document.getElementById("Core");
-coreP.appendChild(document.createElement("br"));
-var foundryP = document.getElementById("Foundry");
-foundryP.appendChild(document.createElement("br"));
-var advFoundryP = document.getElementById("AdvFoundry");
-advFoundryP.appendChild(document.createElement("br"));
-var starforgeP = document.getElementById("Starforge");
-starforgeP.appendChild(document.createElement("br"));
-var advStarforgeP = document.getElementById("AdvStarforge");
-advStarforgeP.appendChild(document.createElement("br"));
-document.getElementById("mainTable").appendChild(coreP);
-document.getElementById("mainTable").appendChild(foundryP);
-document.getElementById("mainTable").appendChild(advFoundryP);
-document.getElementById("mainTable").appendChild(starforgeP);
-document.getElementById("mainTable").appendChild(advStarforgeP);
-document.getElementById("mainTable").appendChild(unitInfoText);
-var cell1 = document.getElementById("cell1");
-var cell2 = document.getElementById("cell5");
-var cell3 = document.getElementById("cell2");
-var cell4 = document.getElementById("cell3");
-var cell5 = document.getElementById("cell4");
-var cell6 = document.getElementById("cell6");
-var cell7 = document.getElementById("cell7");
-var cell8 = document.getElementById("cell8");
-var deckCells = [
-    cell1,
-    cell2,
-    cell3,
-    cell4,
-    cell5,
-    cell6,
-    cell7,
-    cell8
+},{}],"alK4Z":[function(require,module,exports) {
+//load the unit json file
+var unitJson = require("8f00d5bd190beb80");
+//create a constructor for a unit object with all the stats, which takes a json entry
+class Unit {
+    constructor(jsonEntry){
+        console.log(jsonEntry);
+        this.name = jsonEntry.Name;
+        this.imagename = jsonEntry.Image;
+        this.health = jsonEntry.Health;
+        this.damage = jsonEntry.Damage;
+        this.speed = jsonEntry.Speed;
+        this.range = jsonEntry.Range;
+        this.matter = jsonEntry.Matter;
+        this.energy = jsonEntry.Energy;
+        this.bandwidth = jsonEntry.Bandwidth;
+        this.building = jsonEntry.Building;
+        this.ability = jsonEntry.Ability;
+        this.attackType = jsonEntry["Attack Type"];
+        this.attackType2 = jsonEntry["Attack Type 2"];
+        this.unitType = jsonEntry["Unit Type"];
+        this.strongAgainst = jsonEntry["Strong Against"];
+        this.strongAgainst2 = jsonEntry["StrongAgainst 2"];
+        this.weakAgainst = jsonEntry["Weak Against"];
+        this.weakAgainst2 = jsonEntry["Weak Against 2"];
+        this.other = jsonEntry.Other;
+        this.manufacturer = jsonEntry.Manufacturer;
+    }
+}
+//create an empty array of units
+var units = [];
+//units that are selected are added to the deck
+var selectedUnits = [];
+//create a structure of rules for what units can go in the deck slots
+//using the unit's building parameter
+var deckrules = [
+    {
+        building: "Core",
+        building2: ""
+    },
+    {
+        building: "Core",
+        building2: ""
+    },
+    {
+        building: "Foundry",
+        building2: ""
+    },
+    {
+        building: "Starforge",
+        building2: ""
+    },
+    {
+        building: "Advanced Foundry",
+        building2: ""
+    },
+    {
+        building: "Advanced Starforge",
+        building2: ""
+    },
+    {
+        building: "Advanced Foundry",
+        building2: "Foundry"
+    },
+    {
+        building: "Advanced Starforge",
+        building2: "Starforge"
+    }
 ];
-function updateDeckCells(deckSlot, unitName) {
-    //console.log(deckSlot);
-    //console.log(unitName);
-    //console.log(deckCells[deckSlot]);
-    //console.log(deckCells[deckSlot].innerHTML);
-    //console.log(deckCells[deckSlot].innerHTML.indexOf(unitName));
-    if (deckCells[deckSlot].innerHTML.indexOf(unitName) == -1) deckCells[deckSlot].innerHTML += unitName + "<br>";
-}
-//turn this into a function below
-//for each unit in json append a child containing its name
-/*
-Object.keys(json).forEach((key) => {
-	console.log(json[key].Name);
-	text.innerHTML += json[key].Name + '<br>';
+//for each entry in the json file, create a new unit object and add it to the array
+unitJson.forEach(function(entry) {
+    units.push(new Unit(entry));
 });
- */ //write the function from here:
-function addUnitNames() {
-    Object.keys((0, _unitsJsonDefault.default)).forEach((key)=>{
-        console.log((0, _unitsJsonDefault.default)[key].Name);
-        unitInfoText.innerHTML += (0, _unitsJsonDefault.default)[key].Name + "<br>";
-    });
-}
-/*
-//repeat the function to add all other properties of units
-
-properties:
-		"Health": 4,
-		"Damage": 5,
-		"Speed": 3,
-		"Range": 3,
-		"Matter": 125,
-		"Energy": 125,
-		"Bandwidth": 5,
-		"Building": "Advanced Starforge",
-		"Attack Type": "Anti-Air",
-		"Attack Type 2": "",
-		"Unit Type": "Air",
-		"Ability": "",
-		"Image": "valkyrie.png"
-*/ function addUnitProperties() {
-    Object.keys((0, _unitsJsonDefault.default)).forEach((key)=>{
-        unitInfoText.innerHTML += "<br>";
-        Object.keys((0, _unitsJsonDefault.default)[key]).forEach((prop)=>{
-            unitInfoText.innerHTML += prop + ": " + (0, _unitsJsonDefault.default)[key][prop] + "<br>";
-        });
-    });
-}
-//addUnitProperties();
-//only add the unit properties for the name passed to the function
-function addUnitPropertiesByName(name) {
-    Object.keys((0, _unitsJsonDefault.default)).forEach((key)=>{
-        if ((0, _unitsJsonDefault.default)[key].Name == name) {
-            unitInfoText.innerHTML = "";
-            unitInfoText.innerHTML += "<br>";
-            Object.keys((0, _unitsJsonDefault.default)[key]).forEach((prop)=>{
-                unitInfoText.innerHTML += prop + ": " + (0, _unitsJsonDefault.default)[key][prop] + "<br>";
-                //if prop is Image, show the image instead of text
-                if (prop == "Image") unitInfoText.innerHTML += `<img src="images/${(0, _unitsJsonDefault.default)[key][prop]}" class="img">`;
-            });
-        }
-    });
-}
-//make an array to store each button so they can be iterated upon
-var buttonStore = [];
-//create a button for each unit
-function addButton(name, onClickFunc, buildingElement, mouseOverFunc) {
-    //look the unit up in json by its name and check the confirmed value
-    //if the value is true, then add the button to the buildingElement
-    //if the value is false, then do not add the button
-    //if the value is not present, then add the button
-    console.log("boo!");
-    var button = document.createElement("button");
-    var unitName = name;
-    Object.keys((0, _unitsJsonDefault.default)).forEach((key)=>{
-        if ((0, _unitsJsonDefault.default)[key].Name == name) {
-            console.log("foundkey");
-            if ((0, _unitsJsonDefault.default)[key].Confirmed == "y") {
-                console.log("confirmed");
-                buttonStore.push(button);
-                if (buildingElement.appendChild) buildingElement.appendChild(button);
-                console.log(name);
-                button.innerHTML = `<table><tr><td><img src="images/${(0, _unitsJsonDefault.default)[key].Image}.png" class="buttonImg"></td><td id="buttonStats">${(0, _unitsJsonDefault.default)[key].Name}</td><tr></table>`;
-                button.classList.add("unitButton");
-                button.onclick = onClickFunc;
-                button.addEventListener("mouseover", mouseOverFunc);
-                buttonStore.push(button);
-                return button;
-            }
-        }
-    });
-//button.innerHTML = name;
-//set button.innerHTML to image file from json, if the values exists
-//if (json[name].Image != undefined) button.innerHTML = `<img src="images/${json[name].Image}" class="img">`;
-//button class
-//button.classList.add('unitButton');
-//document.body.appendChild(button);
-//addbutton to array for iteration
-}
-//addUnitPropertiesByName('Valkyrie');
-var currentDeckList = [];
-//write a function to get the total matter of the current deck list
-function getDeckMatter() {
-    var totalMatter = 0;
-    currentDeckList.forEach((unit)=>{
-        Object.keys((0, _unitsJsonDefault.default)).forEach((key)=>{
-            if ((0, _unitsJsonDefault.default)[key].Name == unit) totalMatter += (0, _unitsJsonDefault.default)[key].Matter;
-        });
-    });
-    return totalMatter;
-}
-function getDeckEnergy() {
-    var totalEnergy = 0;
-    currentDeckList.forEach((unit)=>{
-        Object.keys((0, _unitsJsonDefault.default)).forEach((key)=>{
-            if ((0, _unitsJsonDefault.default)[key].Name == unit) totalEnergy += (0, _unitsJsonDefault.default)[key].Energy;
-        });
-    });
-    return totalEnergy;
-}
-function getDeckSpeed() {
-    var totalSpeed = 0;
-    currentDeckList.forEach((unit)=>{
-        Object.keys((0, _unitsJsonDefault.default)).forEach((key)=>{
-            if ((0, _unitsJsonDefault.default)[key].Name == unit) totalSpeed += (0, _unitsJsonDefault.default)[key].Speed;
-        });
-    });
-    return totalSpeed;
-}
-function getDeckDamage() {
-    var totalDamage = 0;
-    currentDeckList.forEach((unit)=>{
-        Object.keys((0, _unitsJsonDefault.default)).forEach((key)=>{
-            if ((0, _unitsJsonDefault.default)[key].Name == unit) totalDamage += (0, _unitsJsonDefault.default)[key].Damage;
-        });
-    });
-    return totalDamage;
-}
-function getDeckHealth() {
-    var totalHealth = 0;
-    currentDeckList.forEach((unit)=>{
-        Object.keys((0, _unitsJsonDefault.default)).forEach((key)=>{
-            if ((0, _unitsJsonDefault.default)[key].Name == unit) totalHealth += (0, _unitsJsonDefault.default)[key].Health;
-        });
-    });
-    return totalHealth;
-}
-function getDeckStrengths() {
-    var strengths = [];
-    currentDeckList.forEach((unit)=>{
-        Object.keys((0, _unitsJsonDefault.default)).forEach((key)=>{
-            if ((0, _unitsJsonDefault.default)[key].Name == unit) {
-                if ((0, _unitsJsonDefault.default)[key]["Strong Against"] != undefined) strengths.push((0, _unitsJsonDefault.default)[key].Strengths);
-            }
-        });
-    });
-    //return strengths;
-    return strengths.join(", ");
-}
-// we need to write the following functions, to show them in the deckStats:
-// getDeckWeaknesses; getDeckAbilities; getDeckAttackTypes; getDeckUnitTypes;
-//make this work for the weak against json key
-function getDeckWeaknesses() {
-    var weaknesses = [];
-    currentDeckList.forEach((unit)=>{
-        Object.keys((0, _unitsJsonDefault.default)).forEach((key)=>{
-            if ((0, _unitsJsonDefault.default)[key].Name == unit) {
-                if ((0, _unitsJsonDefault.default)[key]["Weak Against"] != undefined) weaknesses.push((0, _unitsJsonDefault.default)[key]["Weak Against"]);
-            }
-        });
-    });
-    return weaknesses.join(", ");
-//return weaknesses;
-}
-function getDeckAbilities() {
-    var abilities = [];
-    currentDeckList.forEach((unit)=>{
-        Object.keys((0, _unitsJsonDefault.default)).forEach((key)=>{
-            if ((0, _unitsJsonDefault.default)[key].Name == unit) {
-                if ((0, _unitsJsonDefault.default)[key].Ability != "") abilities.push((0, _unitsJsonDefault.default)[key].Ability);
-            }
-        });
-    });
-    return abilities.join(", ");
-//return abilities;
-}
-function getDeckAttackTypes() {
-    var attackTypes = [];
-    currentDeckList.forEach((unit)=>{
-        Object.keys((0, _unitsJsonDefault.default)).forEach((key)=>{
-            if ((0, _unitsJsonDefault.default)[key].Name == unit) {
-                if ((0, _unitsJsonDefault.default)[key]["Attack Type"] != undefined) {
-                    if ((0, _unitsJsonDefault.default)[key]["Attack Type"] != "") attackTypes.push((0, _unitsJsonDefault.default)[key]["Attack Type"]);
-                }
-                if ((0, _unitsJsonDefault.default)[key]["Attack Type 2"] != undefined) //filter empty keys
-                {
-                    if ((0, _unitsJsonDefault.default)[key]["Attack Type 2"] != "") attackTypes.push((0, _unitsJsonDefault.default)[key]["Attack Type 2"]);
-                }
-            }
-        });
-    });
-    //return attackTypes;
-    return attackTypes.join(", ");
-}
-function getDeckUnitTypes() {
-    var unitTypes = [];
-    currentDeckList.forEach((unit)=>{
-        Object.keys((0, _unitsJsonDefault.default)).forEach((key)=>{
-            if ((0, _unitsJsonDefault.default)[key].Name == unit) {
-                if ((0, _unitsJsonDefault.default)[key]["Unit Type"] != undefined) //filter empty keys
-                {
-                    if ((0, _unitsJsonDefault.default)[key]["Unit Type"] != "") unitTypes.push((0, _unitsJsonDefault.default)[key]["Unit Type"]);
-                }
-            }
-        });
-    });
-    //return unitTypes;
-    return unitTypes.join(", ");
-}
-//write a function to get the total matter of the current deck list
-//handle when a deck unit is added to the current Deck list
-var remCoreUnits = 2;
-var remFoundryUnits = 2;
-var remStarforgeUnits = 2;
-var remAdvFoundryUnits = 2;
-var remAdvStarforgeUnits = 2;
-var remTotalFoundryUnits = 3;
-var remTotalStarforgeUnits = 3;
-function updateDeckStats() {
-    deckStatsText.innerHTML += "Remaining units: " + (8 - currentDeckList.length) + "<br> ";
-    deckStatsText.innerHTML += "Remaining Core Units: " + remCoreUnits + "<br> ";
-    deckStatsText.innerHTML += "Remaining Foundry Units: " + remFoundryUnits + "<br> ";
-    deckStatsText.innerHTML += "Remaining Starforge Units: " + remStarforgeUnits + "<br> ";
-    deckStatsText.innerHTML += "Remaining Adv. Foundry Units: " + remAdvFoundryUnits + "<br> ";
-    deckStatsText.innerHTML += "Remaining Adv. Starforge Units: " + remAdvStarforgeUnits + "<br> ";
-    deckStatsText.innerHTML = '<p id ="Anti-GroundWarning">Warning: Missing Anti-Ground Core</p>';
-    deckStatsText.innerHTML += '<p id ="Anti-GroundWarningWarning">Warning: Missing Anti-Air Core</p>';
-    deckStatsText.innerHTML = "Deck Stats: ";
-    deckStatsText.innerHTML += "Units: " + currentDeckList.length + "<br> ";
-    //unit names
-    for(var i = 0; i < currentDeckList.length; i++)deckStatsText.innerHTML += "-- " + currentDeckList[i] + "<br> ";
-    deckStatsText.innerHTML += "Matter: " + getDeckMatter() + " (average 1,000.00 min600max1400)<br> ";
-    deckStatsText.innerHTML += "Energy: " + getDeckEnergy() + " (average 837.50 min500max1175)<br> ";
-    deckStatsText.innerHTML += "Speed: " + getDeckSpeed() + " (average 20.00 min11max29)<br> ";
-    deckStatsText.innerHTML += "Damage: " + getDeckDamage() + " (average 29 min24max29)<br> ";
-    deckStatsText.innerHTML += "Health: " + getDeckHealth() + " (average 22.5 min10max35<br> ";
-    deckStatsText.innerHTML += "<br> ";
-    deckStatsText.innerHTML += "Strengths: " + getDeckStrengths() + "<br> ";
-    deckStatsText.innerHTML += "Weaknesses: " + getDeckWeaknesses() + "<br> ";
-    deckStatsText.innerHTML += "<br> ";
-    deckStatsText.innerHTML += "Abilities: " + getDeckAbilities() + "<br> ";
-    deckStatsText.innerHTML += "<br> ";
-    deckStatsText.innerHTML += "Attack Types: " + getDeckAttackTypes() + "<br> ";
-    deckStatsText.innerHTML += "<br> ";
-    deckStatsText.innerHTML += "Unit Types: " + getDeckUnitTypes() + "<br> ";
-    deckStatsText.innerHTML += "<br> ";
-    //iterate through currentDeckList and add search for if there are anti ground and core units
-    //if there are, then add a warning to the deckStatsText
-    for(var i = 0; i < currentDeckList.length; i++){
-        if (currentDeckList[i].includes("Anti-Ground")) document.getElementById("Anti-GroundWarning").style.color = "white";
-        if (currentDeckList[i].includes("Anti-Air")) document.getElementById("Anti-GroundWarningWarning").style.color = "white";
-    }
-}
-//addDeckUnit is called by the onClickFunction for the deck, it is passed it's name, so it's a good place to update things when a unit is added to the deck
-addDeckUnit = (name)=>{
-    //check if the unit is already in the deck
-    if (currentDeckList.includes(name)) console.log("Unit already in deck");
-    else {
-        currentDeckList.push(name);
-        updateDeckStats();
-        console.log("Added " + name + " to the deck");
-        //at this point, when adding a unit to the deck
-        //update the unit cells
-        updateAllDeckCells();
-    }
-    console.log(currentDeckList);
-    //update the deck stats text
-    //update the deck cells
-    updateDeckCells(currentDeckList.length - 1, name);
-    //<div class="testingclass"><img src="images/${imageFile}.png" class="buttonImg">${name}</p>
-    //add the name of each unit in the deck
-    //for each unit in the deck, add a button to the deckStatsText
-    currentDeckList.forEach((unit)=>{
-        deckStatsText.innerHTML += unit + " ";
-    });
+console.log(units);
+//create a div which has the unit information in a box like a card which takes a unit as a parameter
+//create a unit container div element with the id unitContainer
+var unitContainer = document.createElement("div");
+unitContainer.id = "unitContainer";
+//add the unit container to the body
+document.body.appendChild(unitContainer);
+//create a div for the card remaining counter
+var cardRemainingContainer = document.createElement("div");
+cardRemainingContainer.id = "cardRemainingContainer";
+document.body.appendChild(cardRemainingContainer);
+//create a deck description container div
+var deckDescriptionContainer = document.createElement("div");
+deckDescriptionContainer.id = "deckDescriptionContainer";
+//add the deck description container to the body
+document.body.appendChild(deckDescriptionContainer);
+var unitCardElements = [];
+var remainingPicks = {
+    Core: 2,
+    Foundry: 2,
+    "Advanced Foundry": 2,
+    Starforge: 2,
+    "Advanced Starforge": 2
 };
-//iterate through the deck cells and change the image to the units in the currentDeckList array
-function updateAllDeckCells() {
-    //iterate through the deck cells
-    for(var i = 0; i < deckCells.length; i++)//if the deck cell is not empty, change the image to the next unit in the currentDeckList array
-    if (deckCells[i].innerHTML != "") deckCells[i].innerHTML = `<img src="images/${currentDeckList[i]}.png" class="buttonImg">`;
-}
-//for each unit's name, add a button
-Object.keys((0, _unitsJsonDefault.default)).forEach((key)=>{
-    //create alocal onClickFunction that gets passed to the addButton function
-    var onClickFunction = ()=>{
-        console.log((0, _unitsJsonDefault.default)[key].Name);
-        //add the unit to the deck
-        updateAllDeckCells();
-        if (remCoreUnits > 0) remCoreUnits--;
-        console.log("No more Core units");
-        //add a class to all buttons in the core building that are out of stock which we will turn grey from css
-        coreP.classList.add("outofStock");
-        Object.keys((0, _unitsJsonDefault.default)).forEach((key)=>{
-            if ((0, _unitsJsonDefault.default)[key].Building == "Foundry") {
-                if (remFoundryUnits > 0 && remTotalFoundryUnits > 0) {
-                    remFoundryUnits--;
-                    remTotalFoundryUnits--;
-                } else {
-                    console.log("No more Foundry units");
-                    return;
-                }
-            } else if ((0, _unitsJsonDefault.default)[key].Building == "Starforge") {
-                if (remStarforgeUnits > 0 && remTotalStarforgeUnits > 0) {
-                    remStarforgeUnits--;
-                    remTotalStarforgeUnits--;
-                } else {
-                    console.log("No more Starforge units");
-                    return;
-                }
-            } else if ((0, _unitsJsonDefault.default)[key].Building == "Advanced Foundry") {
-                if (remAdvFoundryUnits > 0 && remTotalFoundryUnits > 0) {
-                    remAdvFoundryUnits--;
-                    remTotalFoundryUnits--;
-                } else {
-                    console.log("No more Advanced Foundry units");
-                    return;
-                }
-            } else if ((0, _unitsJsonDefault.default)[key].Building == "Advanced Starforge") {
-                if (remAdvStarforgeUnits > 0 && remTotalStarforgeUnits > 0) {
-                    remAdvStarforgeUnits--;
-                    remTotalStarforgeUnits--;
-                } else {
-                    console.log("No more Advanced Starforge units");
-                    return;
-                }
+function drawUnitCard(unit) {
+    var unitDiv = document.createElement("div");
+    //add unitDiv to the unitCardElements array
+    unitCardElements.push(unitDiv);
+    unitDiv.className = "unitCard";
+    //add the unit div to the container
+    document.getElementById("unitContainer").appendChild(unitDiv);
+    //add unit health to the unit div  by the letter H plus the number of the value
+    var cardHealthDiv = document.createElement("div");
+    cardHealthDiv.className = "card_health_div";
+    cardHealthDiv.innerHTML = "H" + unit.health;
+    // add  cardNameDiv
+    var cardNameDiv = document.createElement("div");
+    cardNameDiv.className = "card_name_div";
+    cardNameDiv.innerHTML = unit.name;
+    //add cardDamageDiv
+    var cardDamageDiv = document.createElement("div");
+    cardDamageDiv.className = "card_damage_div";
+    cardDamageDiv.innerHTML = "D" + unit.damage;
+    //add cardSpeedDiv
+    var cardSpeedDiv = document.createElement("div");
+    cardSpeedDiv.className = "card_speed_div";
+    cardSpeedDiv.innerHTML = "S" + unit.speed;
+    //add cardRangeDiv
+    var cardRangeDiv = document.createElement("div");
+    cardRangeDiv.className = "card_range_div";
+    cardRangeDiv.innerHTML = "R" + unit.range;
+    var cardBuildingDiv = document.createElement("div");
+    cardBuildingDiv.classList.add("card_building_div");
+    //this contains errors because the building name has spaces, convert the class to lowercase removing spaces
+    //cardBuildingDiv.classList.add(unit.building);
+    //remove spaces from the building name and convert to lowercase
+    cardBuildingDiv.classList.add(unit.building.replace(/\s/g, "").toLowerCase());
+    cardBuildingDiv.innerHTML = "" + unit.building;
+    //add the unit image to the unit div
+    var unitImage = document.createElement("img");
+    unitImage.className = "card_unit_img";
+    //remove spaces and lowercase the unit name to get the imagename
+    var imagename = unit.name.replace(/\s/g, "").toLowerCase();
+    unitImage.src = "./images/" + imagename + ".png";
+    //add the image source
+    unitDiv.appendChild(cardNameDiv);
+    unitDiv.appendChild(cardHealthDiv);
+    unitDiv.appendChild(cardDamageDiv);
+    unitDiv.appendChild(cardSpeedDiv);
+    unitDiv.appendChild(cardRangeDiv);
+    unitDiv.appendChild(cardBuildingDiv);
+    unitDiv.appendChild(unitImage);
+    //add a click event listener to the unit div which calls the drawUnit function with the clicked unit as a parameter
+    unitDiv.addEventListener("click", function() {
+        //drawUnit(unit);
+        console.log(unit.name + " was clicked");
+        //for all the deck rules see if there is a slot in the selectedUnits for the unit's building
+        for(var i = 0; i < deckrules.length; i++)if (deckrules[i].building == unit.building || deckrules[i].building2 == unit.building) {
+            if (selectedUnits[i] == null) {
+                selectedUnits[i] = unit;
+                remainingPicks[unit.building] -= 1;
+                break;
             }
-            addDeckUnit((0, _unitsJsonDefault.default)[key].Name);
-            //iterate through the currentDeckList, if the unit is in the deck, add a class to the button/
-            // such as button.classList.add('inDeck'); also add a class if the building is out of stock
-            buttonStore.for;
-            //call the updateDeckCellsFunction on the highest index of the currentDeckList
-            updateDeckCells(currentDeckList.length - 1, (0, _unitsJsonDefault.default)[key].Name);
-            updateAllDeckCells();
-        });
-    };
-    var mouseOverFunction = ()=>{
-        console.log("Mouse over " + (0, _unitsJsonDefault.default)[key].Name);
-        addUnitPropertiesByName((0, _unitsJsonDefault.default)[key].Name);
-        updateDeckStats();
-    };
-    if ((0, _unitsJsonDefault.default)[key].Name != "") {
-        if ((0, _unitsJsonDefault.default)[key].Building == "Core") addButton((0, _unitsJsonDefault.default)[key].Name, onClickFunction, coreP, mouseOverFunction);
-        else if ((0, _unitsJsonDefault.default)[key].Building == "Foundry") addButton((0, _unitsJsonDefault.default)[key].Name, onClickFunction, foundryP, mouseOverFunction);
-        else if ((0, _unitsJsonDefault.default)[key].Building == "Starforge") addButton((0, _unitsJsonDefault.default)[key].Name, onClickFunction, starforgeP, mouseOverFunction);
-        else if ((0, _unitsJsonDefault.default)[key].Building == "Advanced Foundry") addButton((0, _unitsJsonDefault.default)[key].Name, onClickFunction, advFoundryP, mouseOverFunction);
-        else if ((0, _unitsJsonDefault.default)[key].Building == "Advanced Starforge") addButton((0, _unitsJsonDefault.default)[key].Name, onClickFunction, advStarforgeP, mouseOverFunction);
-    } else console.log("No name for " + (0, _unitsJsonDefault.default)[key].Name);
+            //update the unit cards to show the selected units in grey
+            updateUnitCards();
+        }
+        updateUnitCards();
+    });
+}
+//this is called whenever a unit is clicked
+function updateUnitCards() {
+    var selectedUnitCount = 0;
+    for(var j = 0; j < selectedUnits.length; j++)if (selectedUnits[j] != null) selectedUnitCount++;
+    //for each unit card in unitcarelements
+    for(var i = 0; i < unitCardElements.length; i++){
+        //if the unit name matches a unit that has been selected add a grey css class
+        for(var j = 0; j < selectedUnits.length; j++)if (selectedUnits[j] != null) {
+            //find the child element of unitCardElements[i] with the class name card_name_div
+            var cardNameDiv = unitCardElements[i].getElementsByClassName("card_name_div")[0];
+            if (cardNameDiv.innerHTML == selectedUnits[j].name) unitCardElements[i].classList.add("grey");
+        }
+        //get the name of the unit of the current element
+        var name = unitCardElements[i].getElementsByClassName("card_name_div")[0].innerHTML;
+        var building = unitCardElements[i].getElementsByClassName("card_building_div")[0].innerHTML;
+        //if remainingPicks[building] is 0 add a grey css class
+        if (remainingPicks[building] == 0) unitCardElements[i].classList.add("grey");
+        if (building == "Foundry" && remainingPicks["Foundry"] == 1) {
+            if (remainingPicks["Advanced Foundry"] == 0) unitCardElements[i].classList.add("grey");
+        }
+        if (building == "Staforge" && remainingPicks["Staforge"] == 1) {
+            if (remainingPicks["Advanced Starforge"] == 0) unitCardElements[i].classList.add("grey");
+        }
+        if (building == "Advanced Foundry" && remainingPicks["Advanced Foundry"] == 1) {
+            if (remainingPicks["Foundry"] == 0) unitCardElements[i].classList.add("grey");
+        }
+        if (building == "Advanced Starforge" && remainingPicks["Advanced Starforge"] == 1) {
+            if (remainingPicks["Starforge"] == 0) unitCardElements[i].classList.add("grey");
+        }
+        //if there are no remaining picks
+        if (selectedUnitCount == 8) unitCardElements[i].classList.add("grey");
+    //else remove the grey css class
+    }
+    //deckDescriptionContainer.innerHTML +=\
+    //for each selected unit add its name fo the deckdescriptioncontainer innerhtml
+    cardRemainingContainer.innerHTML = "";
+    var rempicks = document.createElement("p");
+    var remcount = 8 - selectedUnitCount;
+    rempicks.innerHTML = "Remaining Picks: " + remcount;
+    rempicks.className = "rempicks";
+    var corePicks = document.createElement("p");
+    corePicks.innerHTML = "Core: " + remainingPicks["Core"];
+    corePicks.className = "core";
+    var foundryPicks = document.createElement("p");
+    foundryPicks.innerHTML = "Foundry: " + remainingPicks["Foundry"];
+    foundryPicks.className = "foundry";
+    var starforgePicks = document.createElement("p");
+    starforgePicks.innerHTML = "Starforge: " + remainingPicks["Starforge"];
+    starforgePicks.className = "starforge";
+    var advFoundryPicks = document.createElement("p");
+    advFoundryPicks.innerHTML = "Advanced Foundry: " + remainingPicks["Advanced Foundry"];
+    advFoundryPicks.className = "advancedfoundry";
+    var advStarforgePicks = document.createElement("p");
+    advStarforgePicks.innerHTML = "Advanced Starforge: " + remainingPicks["Advanced Starforge"];
+    advStarforgePicks.className = "advancedstarforge";
+    cardRemainingContainer.appendChild(rempicks);
+    cardRemainingContainer.appendChild(corePicks);
+    cardRemainingContainer.appendChild(foundryPicks);
+    cardRemainingContainer.appendChild(starforgePicks);
+    cardRemainingContainer.appendChild(advFoundryPicks);
+    cardRemainingContainer.appendChild(advStarforgePicks);
+    //cardRemainingContainer.innerHTML += '<p class="core"> Core Remaining: ' + remainingPicks['Core'] + '<br>';
+    //cardRemainingContainer.innerHTML += '<p class="foundry">Foundry Remaining: ' + remainingPicks['Foundry'] + '<br>';
+    //cardRemainingContainer.innerHTML += '<p class="starforge">Starforge Remaining: ' + remainingPicks['Starforge'] + '<br>';
+    //cardRemainingContainer.innerHTML += '<p class="advancedfoundry">Advanced Foundry Remaining: ' + remainingPicks['Advanced Foundry'] + '<br>';
+    //cardRemainingContainer.innerHTML += '<p class="advancedstarforge">Advanced Starforge Remaining: ' + remainingPicks['Advanced Starforge'] + '<br>';
+    deckDescriptionContainer.innerHTML = "";
+    for(var i = 0; i < selectedUnits.length; i++)if (selectedUnits[i] != null) deckDescriptionContainer.innerHTML += selectedUnits[i].name + "<br>";
+}
+updateUnitCards();
+//for each unit in the array, call the drawUnit function
+units.forEach(function(unit) {
+    drawUnitCard(unit);
 });
-deckStatsText.appendChild(document.createElement("br"));
-deckStatsText.classList.add("deckStatsText");
-var clearDeckButton = document.getElementById("clearDeckButton");
-clearDeckButton.addEventListener("click", ()=>{
-    currentDeckList = [];
-    updateDeckStats();
-    updateAllDeckCells();
-}); //console.log(text);
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./units.json":"kJ7AW"}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
-};
-
-},{}],"kJ7AW":[function(require,module,exports) {
+},{"8f00d5bd190beb80":"kJ7AW"}],"kJ7AW":[function(require,module,exports) {
 module.exports = JSON.parse('[{"Confirmed":"y","Name":"Blink","Image":"blink","Health":2,"Damage":1,"Speed":3,"Range":2,"Matter":100,"Energy":0,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"Blink","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"Air","Other":"","Manufacturer":"FAR HORIZON COLLECTIVE","Link":"https://www.playbattleaces.com/units/blink","":"","__1":"","z":""},{"Confirmed":"y","Name":"Blink Hunter","Image":"blinkhunter","Health":2,"Damage":1,"Speed":2,"Range":2,"Matter":75,"Energy":25,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Ground","Ability":"Blink","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground","Weak Against 2":"","Other":"","Manufacturer":"FAR HORIZON COLLECTIVE","Link":"https://www.playbattleaces.com/units/blinkhunter","":"","__1":"","z":""},{"Confirmed":"y","Name":"Crab","Image":"crab","Health":4,"Damage":2,"Speed":3,"Range":1,"Matter":100,"Energy":0,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"Air","Other":"","Manufacturer":"NORTH PERFORMANCE","Link":"https://www.playbattleaces.com/units/crab","":"","__1":"","z":""},{"Confirmed":"y","Name":"Gunbot","Image":"gunbot","Health":1,"Damage":1,"Speed":2,"Range":2,"Matter":50,"Energy":0,"Bandwidth":1,"Building":"Core","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"Overclock","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"Air","Other":"","Manufacturer":"SENKAISHU LIMITED","Link":"https://www.playbattleaces.com/units/gunbot","":"","__1":"","z":""},{"Confirmed":"y","Name":"Hornet","Image":"hornet","Health":1,"Damage":2,"Speed":5,"Range":2,"Matter":75,"Energy":25,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground","Weak Against 2":"","Other":"","Manufacturer":"CORONA CENTRAL SYSTEMS","Link":"https://www.playbattleaces.com/units/hornet","":"","__1":"","z":""},{"Confirmed":"y","Name":"Hunter","Image":"hunter","Health":2,"Damage":1,"Speed":2,"Range":2,"Matter":75,"Energy":25,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"NORTH PERFORMANCE","Link":"https://www.playbattleaces.com/units/hunter","":"","__1":"","z":""},{"Confirmed":"y","Name":"Missilebot","Image":"missilebot","Health":2,"Damage":2,"Speed":2,"Range":2,"Matter":75,"Energy":25,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Ground","Ability":"Overclock","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"SENKAISHU LIMITED","Link":"https://www.playbattleaces.com/units/missilebot","":"","__1":"","z":""},{"Confirmed":"y","Name":"Recall","Image":"recall","Health":2,"Damage":1,"Speed":2,"Range":2,"Matter":100,"Energy":0,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"Recall","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"Air","Other":"","Manufacturer":"GHOSTS OF VENUS","Link":"https://www.playbattleaces.com/units/recall","":"","__1":"","z":""},{"Confirmed":"y","Name":"Recall Hunter","Image":"recallhunter","Health":2,"Damage":2,"Speed":1,"Range":2,"Matter":75,"Energy":25,"Bandwidth":2,"Building":"Core","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Ground","Ability":"Recall","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground","Weak Against 2":"","Other":"","Manufacturer":"GHOSTS OF VENUS","Link":"https://www.playbattleaces.com/units/recallhunter","":"","__1":"","z":""},{"Confirmed":"y","Name":"Wasp","Image":"wasp","Health":1,"Damage":1,"Speed":5,"Range":1,"Matter":25,"Energy":0,"Bandwidth":1,"Building":"Core","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"Air","Other":"","Manufacturer":"GHOSTS OF VENUS","Link":"https://www.playbattleaces.com/units/wasp","":"","__1":"","z":""},{"Confirmed":"y","Name":"Beetle","Image":"beetle","Health":2,"Damage":1,"Speed":2,"Range":2,"Matter":75,"Energy":25,"Bandwidth":2,"Building":"Core","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground","Weak Against 2":"","Other":"","Manufacturer":"IRON AND SONS","Link":"https://www.playbattleaces.com/units/beetle","":"","__1":"","z":""},{"Confirmed":"y","Name":"Scorpion","Image":"scorpion","Health":3,"Damage":1,"Speed":3,"Range":1,"Matter":50,"Energy":0,"Bandwidth":1,"Building":"Core","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"Air","Other":"","Manufacturer":"IRON AND SONS","Link":"https://www.playbattleaces.com/units/scorpion","":"","__1":"","z":""},{"Confirmed":"","Name":"Ballista","Image":"ballista","Health":2,"Damage":5,"Speed":2,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"High Health","Weak Against 2":"","Other":"","Manufacturer":"NORTH PERFORMANCE","Link":"https://www.playbattleaces.com/units/ballista","":"","__1":"","z":""},{"Confirmed":"y","Name":"Bomber","Image":"bomber","Health":1,"Damage":5,"Speed":5,"Range":1,"Matter":50,"Energy":50,"Bandwidth":2,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"Self Destructs","Strong Against":"Core Units","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"High Health","Other":"","Manufacturer":"IRON AND SONS","Link":"https://www.playbattleaces.com/units/bomber","":"","__1":"","z":""},{"Confirmed":"y","Name":"Crusader","Image":"crusader","Health":5,"Damage":4,"Speed":3,"Range":1,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"Splash","StrongAgainst 2":"","Weak Against":"Burst","Weak Against 2":"","Other":"","Manufacturer":"IRON AND SONS","Link":"https://www.playbattleaces.com/units/crusader","":"","__1":"","z":""},{"Confirmed":"y","Name":"Destroyer","Image":"destroyer","Health":3,"Damage":5,"Speed":2,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Burst","Unit Type":"Ground","Ability":"","Strong Against":"High Health","StrongAgainst 2":"","Weak Against":"Core Units","Weak Against 2":"","Other":"","Manufacturer":"HEAVY UNION ALLIANCE","Link":"https://www.playbattleaces.com/units/destroyer","":"","__1":"","z":""},{"Confirmed":"y","Name":"King Crab","Image":"kingcrab","Health":4,"Damage":5,"Speed":3,"Range":1,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"","Strong Against":"Splash","StrongAgainst 2":"","Weak Against":"Burst","Weak Against 2":"","Other":"","Manufacturer":"NORTH PERFORMANCE","Link":"https://www.playbattleaces.com/units/kingcrab","":"","__1":"","z":""},{"Confirmed":"y","Name":"Mortar","Image":"mortar","Health":4,"Damage":5,"Speed":2,"Range":5,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"Setup","Strong Against":"","StrongAgainst 2":"","Weak Against":"Long Range","Weak Against 2":"","Other":"","Manufacturer":"HEAVY UNION ALLIANCE","Link":"https://www.playbattleaces.com/units/mortar","":"","__1":"","z":""},{"Confirmed":"y","Name":"Recall Shocker","Image":"recallshocker","Health":3,"Damage":5,"Speed":1,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"Recall","Strong Against":"","StrongAgainst 2":"","Weak Against":"High Health","Weak Against 2":"","Other":"","Manufacturer":"GHOSTS OF VENUS","Link":"https://www.playbattleaces.com/units/recallshocker","":"","__1":"","z":""},{"Confirmed":"y","Name":"Shocker","Image":"shocker","Health":3,"Damage":5,"Speed":2,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"","Strong Against":"Core Units","StrongAgainst 2":"","Weak Against":"High Health","Weak Against 2":"","Other":"Shock Splash","Manufacturer":"CORONA CENTRAL SYSTEMS","Link":"https://www.playbattleaces.com/units/shocker","":"","__1":"","z":""},{"Confirmed":"y","Name":"Swift Shocker","Image":"swiftshocker","Health":2,"Damage":5,"Speed":4,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"","Strong Against":"Core Units","StrongAgainst 2":"","Weak Against":"High Health","Weak Against 2":"","Other":"Shock Splash","Manufacturer":"","Link":"https://www.playbattleaces.com/units/swiftshocker","":"","__1":"","z":""},{"Confirmed":"y?","Name":"Heavy Hunter","Image":"heavyhunter","Health":"Unknown","Damage":"","Speed":"","Range":"","Matter":"","Energy":"","Bandwidth":"","Building":"Foundry","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"","Link":"https://www.playbattleaces.com/units/heavyhunter","":"","__1":"","z":""},{"Confirmed":"y?","Name":"Raider","Image":"raider","Health":"Unknown","Damage":"","Speed":"","Range":"","Matter":"","Energy":"","Bandwidth":"","Building":"Foundry","Attack Type":"Anti-Worker","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"","Link":"https://www.playbattleaces.com/units/raider","":"","__1":"","z":""},{"Confirmed":"y","Name":"Heavy Turret","Image":"heavyturret","Health":5,"Damage":4,"Speed":1,"Range":4,"Matter":200,"Energy":100,"Bandwidth":0,"Building":"Starforge","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Base defense","Ability":"","Strong Against":"Harassment","StrongAgainst 2":"","Weak Against":"Long Range","Weak Against 2":"","Other":"Placed","Manufacturer":"IRON AND SONS","Link":"https://www.playbattleaces.com/units/heavyturret","":"","__1":"","z":""},{"Confirmed":"y","Name":"Stinger","Image":"stinger","Health":3,"Damage":5,"Speed":5,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Starforge","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"","Other":"Strong With Melee","Manufacturer":"IRON AND SONS","Link":"https://www.playbattleaces.com/units/stinger","":"","__1":"","z":""},{"Confirmed":"y","Name":"Advanced Recall","Image":"advancedrecall","Health":1,"Damage":3,"Speed":2,"Range":2,"Matter":50,"Energy":50,"Bandwidth":2,"Building":"Starforge","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"Recall","Strong Against":"Ground","StrongAgainst 2":"","Weak Against":"Splash","Weak Against 2":"","Other":"","Manufacturer":"GHOSTS OF VENUS","Link":"https://www.playbattleaces.com/units/advancedrecall","":"","__1":"","z":""},{"Confirmed":"y","Name":"Airship","Image":"airship","Health":4,"Damage":4,"Speed":3,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Starforge","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground Anti-Air","Weak Against 2":"","Other":"Air2Air Specialist","Manufacturer":"NORTH PERFORMANCE","Link":"https://www.playbattleaces.com/units/ariship","":"","__1":"","z":""},{"Confirmed":"y","Name":"Falcon","Image":"falcon","Health":4,"Damage":3,"Speed":1,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Starforge","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"Ground","StrongAgainst 2":"","Weak Against":"Anti-Air","Weak Against 2":"","Other":"","Manufacturer":"GHOSTS OF VENUS","Link":"https://www.playbattleaces.com/units/falcon","":"","__1":"","z":""},{"Confirmed":"y","Name":"Dragonfly","Image":"dragonfly","Health":4,"Damage":3,"Speed":4,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Starforge","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"Anti-Air","Weak Against 2":"","Other":"Mobile Harassment","Manufacturer":"CORONA CENTRAL SYSTEMS","Link":"https://www.playbattleaces.com/units/dragonfly","":"","__1":"","z":""},{"Confirmed":"y","Name":"Butterfly","Image":"butterfly","Health":1,"Damage":5,"Speed":3,"Range":2,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Starforge","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"Ground","StrongAgainst 2":"","Weak Against":"Anti-Air","Weak Against 2":"","Other":"","Manufacturer":"NORTH PERFORMANCE","Link":"https://www.playbattleaces.com/units/butterfly","":"","__1":"","z":""},{"Confirmed":"y?","Name":"Mammoth","Image":"mammoth","Health":5,"Damage":3,"Speed":3,"Range":1,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Starforge","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"","Link":"https://www.playbattleaces.com/units/mammoth","":"","__1":"","z":"z"},{"Confirmed":"y","Name":"Predator","Image":"predator","Health":2,"Damage":5,"Speed":2,"Range":5,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Advanced Foundry","Attack Type":"Anti-Air","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground","Weak Against 2":"","Other":"","Manufacturer":"HEAVY UNION ALLIANCE","Link":"https://www.playbattleaces.com/units/predator","":"","__1":"","z":""},{"Confirmed":"y","Name":"Heavy Ballista","Image":"heavyballista","Health":4,"Damage":5,"Speed":2,"Range":2,"Matter":250,"Energy":250,"Bandwidth":10,"Building":"Advanced Foundry","Attack Type":"Anti-Ground","Attack Type 2":"Splash","Unit Type":"Ground","Ability":"","Strong Against":"Core Units","StrongAgainst 2":"","Weak Against":"High Health","Weak Against 2":"","Other":"","Manufacturer":"NORTH PERFORMANCE","Link":"https://www.playbattleaces.com/units/heavyballista","":"","__1":"","z":""},{"Confirmed":"z","Name":"Sniper","Image":"sniper","Health":2,"Damage":5,"Speed":1,"Range":5,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Advanced Foundry","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"","Link":"https://www.playbattleaces.com/units/sniper","":"","__1":"","z":"z"},{"Confirmed":"z","Name":"Behemoth","Image":"behemoth","Health":5,"Damage":"?","Speed":2,"Range":2,"Matter":250,"Energy":0,"Bandwidth":5,"Building":"Advanced Foundry","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"Blink","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"","Link":"https://www.playbattleaces.com/units/behemoth","":"","__1":"","z":"z"},{"Confirmed":"y?","Name":"Advanced Blink","Image":"advancedblink","Health":4,"Damage":2,"Speed":3,"Range":2,"Matter":50,"Energy":50,"Bandwidth":5,"Building":"Advanced Foundry","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"","Link":"https://www.playbattleaces.com/units/advancedblink","":"","__1":"","z":""},{"Confirmed":"y?","Name":"Double Machine Gun","Image":"doublemachinegun","Health":"Unknown","Damage":"","Speed":"","Range":"","Matter":"","Energy":"","Bandwidth":"","Building":"Advanced Foundry","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"","Link":"https://www.playbattleaces.com/units/doublemachinegun","":"","__1":"","z":""},{"Confirmed":"y","Name":"Valkyrie","Image":"valkyrie","Health":4,"Damage":5,"Speed":3,"Range":3,"Matter":125,"Energy":125,"Bandwidth":5,"Building":"Advanced Starforge","Attack Type":"Anti-Air","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"Air","StrongAgainst 2":"","Weak Against":"Ground Anti-Air","Weak Against 2":"","Other":"Air2Air Specialist","Manufacturer":"CORONA CENTRAL SYSTEMS","Link":"https://www.playbattleaces.com/units/valkyrie","":"","__1":"","z":""},{"Confirmed":"y","Name":"Locust","Image":"locust","Health":1,"Damage":2,"Speed":4,"Range":2,"Matter":50,"Energy":50,"Bandwidth":2,"Building":"Advanced Starforge","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"Anti-Air","Weak Against 2":"","Other":"Mobile Harassment","Manufacturer":"","Link":"https://www.playbattleaces.com/units/locust","":"","__1":"","z":""},{"Confirmed":"y","Name":"Katbus","Image":"katbus","Health":5,"Damage":5,"Speed":2,"Range":2,"Matter":250,"Energy":250,"Bandwidth":10,"Building":"Advanced Starforge","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"Ground","StrongAgainst 2":"Splash","Weak Against":"Anti-Air","Weak Against 2":"","Other":"","Manufacturer":"CORONA CENTRAL SYSTEMS","Link":"https://www.playbattleaces.com/units/katbus","":"","__1":"","z":""},{"Confirmed":"y","Name":"Bulwark","Image":"bulwark","Health":5,"Damage":5,"Speed":1,"Range":2,"Matter":250,"Energy":250,"Bandwidth":10,"Building":"Advanced Starforge","Attack Type":"Versatile","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"Ground","StrongAgainst 2":"","Weak Against":"Anti-Air","Weak Against 2":"","Other":"","Manufacturer":"NORTH PERFORMANCE","Link":"https://www.playbattleaces.com/units/bulwark","":"","__1":"","z":""},{"Confirmed":"z","Name":"Kraken","Image":"kraken","Health":5,"Damage":5,"Speed":1,"Range":"","Matter":3000,"Energy":3000,"Bandwidth":"","Building":"?","Attack Type":"Anti-Ground","Attack Type 2":"","Unit Type":"Air","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"","Link":"https://www.playbattleaces.com/units/kraken","":"","__1":"","z":"x"},{"Confirmed":"y?","Name":"Artillery","Image":"artillery","Health":"Unknown","Damage":"","Speed":"","Range":"","Matter":"","Energy":"","Bandwidth":"","Building":"Advanced Starforge","Attack Type":"Anti-Ground","Attack Type 2":"?","Unit Type":"Ground","Ability":"","Strong Against":"","StrongAgainst 2":"","Weak Against":"","Weak Against 2":"","Other":"","Manufacturer":"","Link":"https://www.playbattleaces.com/units/artillery","":"","__1":"","z":""}]');
 
-},{}]},["gbXMy","bNKaB"], "bNKaB", "parcelRequire716c")
+},{}]},["ecy6S","alK4Z"], "alK4Z", "parcelRequire716c")
 
-//# sourceMappingURL=index.0641b553.js.map
+//# sourceMappingURL=index.d67ac236.js.map
