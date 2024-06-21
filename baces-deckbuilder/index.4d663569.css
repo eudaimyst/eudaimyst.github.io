@@ -1,6 +1,6 @@
 .unitCard {
   background-color: #0b0b0e;
-  border: 1px solid #b69606;
+  border: 1px solid #453f94;
   width: 100px;
   height: 100px;
   margin: 5px;
@@ -9,13 +9,22 @@
 }
 
 .card_health_div {
-  color: #138d13;
+  color: #24aa24;
   width: 20%;
   margin: 0;
   padding: 0;
   position: absolute;
   top: 0;
-  right: 0;
+  right: -10px;
+}
+
+.cardStatImage {
+  opacity: .8;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 1px;
+  right: 20px;
 }
 
 .card_damage_div {
@@ -25,7 +34,7 @@
   padding: 0;
   position: absolute;
   top: 20px;
-  right: 0;
+  right: -10px;
 }
 
 .card_speed_div {
@@ -35,7 +44,7 @@
   padding: 0;
   position: absolute;
   top: 40px;
-  right: 0;
+  right: -10px;
 }
 
 .card_range_div {
@@ -45,12 +54,16 @@
   padding: 0;
   position: absolute;
   top: 60px;
-  right: 0;
+  right: -10px;
 }
 
 .card_name_div {
+  color: #c0c0db;
+  background-color: #0f0e13;
+  outline: 1px #000;
   margin: 2px;
   padding: 3px;
+  font-size: small;
   position: absolute;
   bottom: 0;
   left: 0;
@@ -61,6 +74,8 @@
   color: #669;
   margin: 2px;
   padding: 3px;
+  font-size: small;
+  font-weight: 400;
   bottom: 0;
   left: 0;
 }
@@ -127,6 +142,17 @@
   height: 100px;
 }
 
+#leftDiv {
+  background-color: bisque;
+  font-size: smaller;
+  display: flex;
+}
+
+#rightDiv {
+  background-color: red;
+  display: flex;
+}
+
 #unitStats {
   color: #fff;
   background-color: #000;
@@ -143,19 +169,21 @@
 #unitContainer {
   background-color: #090416;
   flex-flow: wrap;
-  width: 50%;
+  width: 100%;
   display: flex;
 }
 
 #cardRemainingContainer {
   background-color: #120920;
+  border: 1px solid #9b9990;
   flex-flow: column wrap;
-  width: 10%;
+  width: 30%;
   display: flex;
 }
 
 #deckDisplay {
   background-color: #090c1a;
+  border: 1px solid #9b9990;
   flex-direction: column;
   display: flex;
 }
@@ -163,6 +191,7 @@
 #deckDescriptionContainer {
   color: #fff;
   background-color: #0f0e13;
+  border: 1px solid #9b9990;
   flex-flow: wrap;
   width: 100%;
   font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
@@ -174,9 +203,52 @@
 body {
   color: #ffe2a4;
   background-color: #000;
+  border: 1px solid #9b9990;
+  flex-flow: wrap;
+  font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
+  display: flex;
+}
+
+#body-h {
+  color: #ffe2a4;
+  background-color: #000;
+  border: 1px solid #9b9990;
   flex-direction: row;
   font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
   font-weight: bold;
+  display: flex;
+}
+
+#deckDescription-h {
+  width: 10%;
+}
+
+#deckDescription-v {
+  width: 50%;
+}
+
+#unitContainer-h {
+  background-color: #090416;
+  flex-flow: wrap;
+  width: 50%;
+  display: flex;
+}
+
+#body-v {
+  color: #ffe2a4;
+  background-color: #000;
+  border: 1px solid #9b9990;
+  flex-direction: column;
+  font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
+  display: flex;
+}
+
+#unitContainer-v {
+  background-color: #090416;
+  flex-flow: wrap;
+  width: 100%;
   display: flex;
 }
 /*# sourceMappingURL=index.4d663569.css.map */

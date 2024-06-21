@@ -584,6 +584,7 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"alK4Z":[function(require,module,exports) {
+//#tag top
 //load the unit json file
 var unitJson = require("8f00d5bd190beb80");
 //create a constructor for a unit object with all the stats, which takes a json entry
@@ -667,6 +668,9 @@ unitJson.forEach(function(entry) {
     units.push(new Unit(entry));
 });
 console.log(units);
+//in html we have 2 divs for the left and right side
+//		<div id="leftside"></div>
+//		<div id="rightside"></div>
 //create a div which has the unit information in a box like a card which takes a unit as a parameter
 //create a unit container div element with the id unitContainer
 var unitContainer = document.createElement("div");
@@ -720,6 +724,10 @@ var deckDescriptionContainer = document.createElement("div");
 deckDescriptionContainer.id = "deckDescriptionContainer";
 //add the deck description container to the body
 deckDisplay.appendChild(deckDescriptionContainer);
+//#tag drawUnitCard
+//this is where units are drawn on the pick side
+//it also contains its mouse over and on click functions
+//it takes a unit object defined above
 var unitCardElements = [];
 var remainingPicks = {
     Core: 2,
@@ -738,7 +746,12 @@ function drawUnitCard(unit) {
     //add unit health to the unit div  by the letter H plus the number of the value
     var cardHealthDiv = document.createElement("div");
     cardHealthDiv.className = "card_health_div";
-    cardHealthDiv.innerHTML = "H" + unit.health;
+    cardHealthDiv.innerHTML = unit.health;
+    var cardHealthImg = document.createElement("img");
+    cardHealthImg.src = "./images/health.png";
+    cardHealthImg.className = "cardStatImage";
+    cardHealthDiv.insertBefore(cardHealthImg, cardHealthDiv.firstChild);
+    //cardHealthDiv.appendChild(cardHealthImg);
     // add  cardNameDiv
     var cardNameDiv = document.createElement("div");
     cardNameDiv.className = "card_name_div";
@@ -746,17 +759,35 @@ function drawUnitCard(unit) {
     //add cardDamageDiv
     var cardDamageDiv = document.createElement("div");
     cardDamageDiv.className = "card_damage_div";
-    cardDamageDiv.innerHTML = "D" + unit.damage;
+    cardDamageDiv.innerHTML = unit.damage;
+    var cardDamageImg = document.createElement("img");
+    cardDamageImg.src = "./images/damage.png";
+    cardDamageImg.className = "cardStatImage";
+    cardDamageDiv.insertBefore(cardDamageImg, cardDamageDiv.firstChild);
     //add cardSpeedDiv
     var cardSpeedDiv = document.createElement("div");
     cardSpeedDiv.className = "card_speed_div";
-    cardSpeedDiv.innerHTML = "S" + unit.speed;
+    cardSpeedDiv.innerHTML = unit.speed;
+    var cardSpeedImg = document.createElement("img");
+    cardSpeedImg.src = "./images/speed.png";
+    cardSpeedImg.className = "cardStatImage";
+    cardSpeedDiv.insertBefore(cardSpeedImg, cardSpeedDiv.firstChild);
     //add cardRangeDiv
     var cardRangeDiv = document.createElement("div");
     cardRangeDiv.className = "card_range_div";
-    cardRangeDiv.innerHTML = "R" + unit.range;
+    cardRangeDiv.innerHTML = unit.range;
+    var cardRangeImg = document.createElement("img");
+    cardRangeImg.src = "./images/range.png";
+    cardRangeImg.className = "cardStatImage";
+    cardRangeDiv.insertBefore(cardRangeImg, cardRangeDiv.firstChild);
     var cardBuildingDiv = document.createElement("div");
     cardBuildingDiv.classList.add("card_building_div");
+    var cardBuildingImg = document.createElement("img");
+    //covert unit name to lowercase without space
+    var imgname = unit.Building;
+    cardBuildingImg.src = "./images/" + unit.building + ".png";
+    cardBuildingImg.className = "cardBuildingImage";
+    cardBuildingDiv.insertBefore(cardBuildingImg, cardBuildingDiv.firstChild);
     //this contains errors because the building name has spaces, convert the class to lowercase removing spaces
     //cardBuildingDiv.classList.add(unit.building);
     //remove spaces from the building name and convert to lowercase
@@ -933,6 +964,7 @@ function updateUnitCards() {
         deckEnergy += selectedUnits[i].energy;
         deckBandwidth += selectedUnits[i].bandwidth;
     }
+    //#region deckDescriptionhtml
     deckDescriptionContainer.innerHTML += "<br>Deck Stats: <br>";
     var statsString = "==========<br>";
     statsString += "Health: " + deckHealth + "<br>";
@@ -1045,6 +1077,7 @@ function updateUnitCards() {
     //add the image of the unit to the deck slots
     //low case and remove the space from the name ot get the image
     }
+//#endregion
 }
 updateUnitCards();
 //for each unit in the array, call the drawUnit function
