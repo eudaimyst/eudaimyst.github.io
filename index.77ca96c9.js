@@ -590,6 +590,7 @@ var _fastSort = require("fast-sort");
 //#tag load-unit-json
 var jsonUnitsBase = require("a49a4cf24aad666e");
 var unitList = [];
+var lastSortValue = "name";
 //#region unit-definition creates units from json entry
 //create an empty object to use as a base of the units, that has a new constructor to create a object
 class Unit {
@@ -602,10 +603,11 @@ class Unit {
             var cleanNameKey = key;
             cleanNameKey = removeSpacesCapitalsSpecialCharacters(key);
             var value = jsonEntry[key];
+            var cleanValue = removeSpacesCapitalsSpecialCharacters(value);
             if (value.constructor == String) {
-                if (cleanNameKey != "emoji") value = removeSpacesCapitalsSpecialCharacters(value);
+                if (cleanNameKey != "emoji") value = cleanValue;
             }
-            if (key == "image") value = jsonEntry.Name;
+            if (key == "image") value = removeSpacesCapitalsSpecialCharacters(jsonEntry.Name);
             if (cleanNameKey == "supply") this["bandwidth"] = value;
             else if (cleanNameKey == "damageg") this["damage"] = value;
             else this[cleanNameKey] = value;
